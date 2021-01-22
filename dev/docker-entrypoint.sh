@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 set -Eeo pipefail
-# TODO add "-u"
 
 # usage: file_env VAR [DEFAULT]
 #    ie: file_env 'XYZ_DB_PASSWORD' 'example'
