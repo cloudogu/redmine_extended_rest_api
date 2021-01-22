@@ -43,8 +43,10 @@ RUN set -eux; \
 		freetds-dev gcc libmariadbclient-dev libpq-dev libsqlite3-dev make patch; \
 	rm -rf /var/lib/apt/lists/*; \
 	\
+	# add gem for test execution
 	echo "gem 'minitest'" >> Gemfile; \
 	bundle install --jobs "$(nproc)"; \
+	# generate lock files for different adapter types
 	for adapter in mysql2 postgresql sqlserver sqlite3; do \
 		echo "$RAILS_ENV:" > ./config/database.yml; \
 		echo "  adapter: $adapter" >> ./config/database.yml; \
@@ -64,17 +66,13 @@ RUN set -eux; \
     echo "  database: db/redmine.sqlite3" >> ./config/database.yml; \
     rake db:migrate;
 
-COPY addon/ /usr/src/redmine/plugins/redmine_extended_rest_api
-
+COPY . /usr/src/redmine/plugins/redmine_extended_rest_api
+# install test gems
 RUN  set -eux; \
      bundle install; \
      bundle install --with test;
 
- #fix permissions for running as an arbitrary user
-RUN chmod -R ugo=rwX Gemfile.lock "$GEM_HOME"; \
-	rm -rf ~redmine/.bundle;
-
-COPY docker-entrypoint.sh /
+COPY dev/docker-entrypoint.sh /
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 EXPOSE 3000

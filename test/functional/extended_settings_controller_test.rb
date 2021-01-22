@@ -2,6 +2,7 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class ExtendedSettingsControllerTest < ActionController::TestCase
   fixtures :settings
+  fixtures :users
 
   # Replace this with your real tests.
   def test_show
@@ -13,7 +14,7 @@ class ExtendedSettingsControllerTest < ActionController::TestCase
   end
 
   def test_create
-    authHeader = { :Authorization => "Basic YWRtaW46YWRtaW4xMjM=" } #Basic YWRtaW46YWRtaW4=
+    authHeader = { :Authorization => "Basic YWRtaW46YWRtaW4=" }
     request.headers.merge! authHeader
 
     get :show
