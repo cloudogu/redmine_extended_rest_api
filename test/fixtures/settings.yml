@@ -1,0 +1,16 @@
+---
+setting001:
+  id: 150
+  name: rest_api_enabled
+  value: 1
+  updated_on: <%= 1.day.ago.to_s(:db) %>
+setting002:
+  id: 300
+  name: default_language
+  value: de
+  updated_on: <%= 1.day.ago.to_s(:db) %>
+setting003:
+  id: 450
+  name: app_title
+  value: Megamine
+  updated_on: <%= 1.day.ago.to_s(:db) %>

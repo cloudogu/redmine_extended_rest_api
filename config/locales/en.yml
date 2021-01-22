@@ -1,0 +1,5 @@
+# English strings go here for Rails i18n
+en:
+  redmine_extended_rest_api_settings_enabled_label: "Enable extended rest api: "
+de:
+  redmine_extended_rest_api_settings_enabled_label: "Aktiviere erweiterte Rest-API: "
