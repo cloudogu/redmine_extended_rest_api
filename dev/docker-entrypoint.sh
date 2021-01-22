@@ -38,12 +38,6 @@ _fix_permissions() {
 	find config files log public/plugin_assets tmp -type f \! -perm 644 -exec chmod 644 '{}' + 2>/dev/null || :
 }
 
-# allow the container to be started with `--user`
-if [ -n "$isLikelyRedmine" ] && [ "$(id -u)" = '0' ]; then
-	_fix_permissions
-	exec gosu redmine "$BASH_SOURCE" "$@"
-fi
-
 if [ -n "$isLikelyRedmine" ]; then
 	_fix_permissions
 	if [ ! -f './config/database.yml' ]; then

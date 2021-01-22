@@ -5,7 +5,7 @@ class ExtendedSettingsControllerTest < ActionController::TestCase
 
   # Replace this with your real tests.
   def test_show
-    headers = { :Authorization => "Basic YWRtaW46YWRtaW4xMjM=" }
+    headers = { :Authorization => "Basic YWRtaW46YWRtaW4=" }
     request.headers.merge! headers
     get :show
     puts response.body
@@ -13,7 +13,7 @@ class ExtendedSettingsControllerTest < ActionController::TestCase
   end
 
   def test_create
-    authHeader = { :Authorization => "Basic YWRtaW46YWRtaW4xMjM=" }
+    authHeader = { :Authorization => "Basic YWRtaW46YWRtaW4xMjM=" } #Basic YWRtaW46YWRtaW4=
     request.headers.merge! authHeader
 
     get :show
