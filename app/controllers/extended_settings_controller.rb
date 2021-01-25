@@ -1,4 +1,20 @@
 class ExtendedSettingsController < ApplicationController
+  include Swagger::Docs::Methods
+
+  swagger_controller :posts, 'Post Controller'
+  swagger_api :create do
+    summary 'Adds or updates the given settings'
+    notes 'Should be used for creating and updating settings'
+    param :form, 'post[name]', :string, :required, 'name'
+    param :form, 'post[publish]', :boolean, :required, 'publish'
+  end
+  swagger_api :show do
+    summary 'Get all the posts'
+    notes 'Should be used for fetching a post'
+    param :path, :id, :string, :id
+    response :unauthorized
+    response :ok, "Success"
+  end
 
   before_action :require_login
   skip_before_action :verify_authenticity_token

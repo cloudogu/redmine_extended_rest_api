@@ -9,37 +9,24 @@ node {
         }
 
         withDockerNetwork { buildNetwork ->
-//            def networtArg = "--network ${buildNetwork}"
+            def networtArg = "--network ${buildNetwork}"
             sh 'echo "Start build..."'
             stage('Build & Test') {
-                def buildImage = docker.build("build/redmine", "-f dev/Dockerfile .")
-                buildImage.inside() {
-                    sh "rake test:plugins:redmine_extended_rest_api;"
+                sh "rm -rf reports/"
+                def dbContainerName = "db-${JOB_BASE_NAME}-${BUILD_NUMBER}".replaceAll("\\/|%2[fF]", "-")
+                def dbRunArgs = networtArg
+                dbRunArgs += " -e POSTGRES_USER=testuser"
+                dbRunArgs += " -e POSTGRES_PASSWORD=testpwd"
+                dbRunArgs += " -e POSTGRES_DB=redmine"
+                dbRunArgs += " --name ${dbContainerName}"
+                docker.image('postgres:12.5-alpine').withRun(dbRunArgs) {
+                    def buildImage = docker.build("build/redmine", "-f dev/Dockerfile --build-arg DB_HOST=${dbContainerName} .")
+                    buildImage.inside(networtArg) {
+                        sh "rake db:migrate"
+                        sh "rake test:plugins:redmine_extended_rest_api;"
+                    }
                 }
-//                docker build -f dev/Dockerfile -t rmtest .; \
-//docker run rmtest bash -c "rake test:plugins:redmine_extended_rest_api;";
-//                dir("dev"){
-//                    def dbContainerName = "db-${JOB_BASE_NAME}-${BUILD_NUMBER}".replaceAll("\\/|%2[fF]", "-")
-//                    def dbRunArgs = networtArg
-//                    dbRunArgs += " -e MYSQL_ROOT_PASSWORD=example"
-//                    dbRunArgs += " -e MYSQL_DATABASE=redmine"
-//                    dbRunArgs += " --name ${dbContainerName}"
-//                    docker.image('mysql:5.7').withRun(dbRunArgs) {
-//                        def buildImage = new Docker(this).build("build/redmine", "dev")
-//                        def redmineContainerName = "redmine-${JOB_BASE_NAME}-${BUILD_NUMBER}".replaceAll("\\/|%2[fF]", "-")
-//                        def redmineRunArgs = networtArg
-//                        redmineRunArgs += " -e REDMINE_DB_MYSQL=db"
-//                        redmineRunArgs += " -e REDMINE_DB_PASSWORD=example"
-//                        redmineRunArgs += " -e REDMINE_SECRET_KEY_BASE=supersecretkey"
-//                        redmineRunArgs += " -e RAILS_ENV=test"
-//                        redmineRunArgs += " --name ${redmineContainerName}"
-//                        redmineRunArgs += " -v ../:/usr/src/redmine/plugins/redmine_extended_rest_api"
-//                        buildImage.inside(redmineRunArgs) {
-//                            sh "bundle install"
-//                            sh "rake test:plugins:redmine_extended_rest_api"
-//                        }
-//                    }
-//                }
+                junit allowEmptyResults: true, testResults: 'reports/TEST-*.xml'
             }
         }
     }

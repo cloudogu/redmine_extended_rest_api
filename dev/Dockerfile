@@ -2,6 +2,7 @@ FROM ruby:2.6-slim-buster
 
 ENV RAILS_ENV test
 ENV HOME /home/redmine
+ENV WORKDIR /usr/src/redmine
 ENV REDMINE_VERSION 4.1.1
 ENV REDMINE_DOWNLOAD_MD5 a15a25dec7b866e213bbd4b041f05f17
 
@@ -16,7 +17,7 @@ RUN set -eux; \
 		subversion ghostscript gsfonts imagemagick dirmngr gnupg; \
 	rm -rf /var/lib/apt/lists/*
 
-WORKDIR /usr/src/redmine
+WORKDIR "${WORKDIR}"
 
 RUN set -eux; \
 	[ ! -d "$HOME" ]; \
@@ -45,6 +46,7 @@ RUN set -eux; \
 	\
 	# add gem for test execution
 	echo "gem 'minitest'" >> Gemfile; \
+	echo "gem 'swagger-docs'" >> Gemfile; \
 	bundle install --jobs "$(nproc)"; \
 	# generate lock files for different adapter types
 	for adapter in mysql2 postgresql sqlserver sqlite3; do \
@@ -53,18 +55,13 @@ RUN set -eux; \
 		bundle install --jobs "$(nproc)" --without development test; \
 		cp Gemfile.lock "Gemfile.lock.${adapter}"; \
 	done; \
-	rm ./config/database.yml; \
-	\
-	echo "production:" >> ./config/database.yml; \
-    echo "  adapter: sqlite3" >> ./config/database.yml; \
-    echo "  database: db/redmine.sqlite3" >> ./config/database.yml; \
-    echo "development:" >> ./config/database.yml; \
-    echo "  adapter: sqlite3" >> ./config/database.yml; \
-    echo "  database: db/redmine.sqlite3" >> ./config/database.yml; \
-    echo "test:" >> ./config/database.yml; \
-    echo "  adapter: sqlite3" >> ./config/database.yml; \
-    echo "  database: db/redmine.sqlite3" >> ./config/database.yml; \
-    rake db:migrate;
+	rm ./config/database.yml;
+
+# generate database configuration file base on build arg 'DB_HOST'
+ARG DB_HOST=postgresql
+COPY dev/create_database_config.rb .
+COPY dev/database.yml.erb .
+RUN ruby create_database_config.rb --host "${DB_HOST}" --path "${WORKDIR}/config/database.yml"
 
 COPY . /usr/src/redmine/plugins/redmine_extended_rest_api
 # install test gems
