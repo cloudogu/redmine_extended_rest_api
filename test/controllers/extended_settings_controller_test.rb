@@ -26,19 +26,4 @@ class ExtendedSettingsControllerTest < ActionController::TestCase
     assert_equal "success", parsed_response['result']
     assert_contains settings, "app_title", "Minimine"
   end
-
-  def test_create_new_entry
-    authHeader = { :Authorization => "Basic YWRtaW46YWRtaW4=" }
-    request.headers.merge! authHeader
-    contentTypeHeader = { "Content-Type" => "application/json" }
-    request.headers.merge! contentTypeHeader
-
-    json = { settings: { kramigurt: "Ehrmann" }}.to_json
-    post :create, body: json
-
-    parsed_response = @response.json_body
-    settings = parsed_response["settings"]
-    assert_equal "success", parsed_response['result']
-    assert_contains settings, "kramigurt", "Ehrmann"
-  end
 end
