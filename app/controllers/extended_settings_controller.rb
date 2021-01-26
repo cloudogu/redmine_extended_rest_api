@@ -9,13 +9,13 @@ class ExtendedSettingsController < ApplicationController
 
   def create
     if params[:settings].nil?
-      render :json => { result: "fail", errors: "no settings provided", settings: Setting.all }
+      render :status => 400, :json => { errors: "no settings provided" }
     else
       errors = Setting.set_all_from_params(params[:settings].to_unsafe_hash)
       if errors.blank?
-        render :json => { result: "success", errors: nil, settings: Setting.all }
+        render :json => {}, :status => :no_content
       else
-        render :json => { result: "fail", errors: errors, settings: Setting.all }
+        render :json => { errors: errors }, :status => :bad_request
       end
     end
   end

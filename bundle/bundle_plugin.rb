@@ -1,3 +1,5 @@
+#!/usr/bin/ruby
+
 require 'fileutils'
 
 PLUGIN_DIR="redmine_extended_rest_api"
