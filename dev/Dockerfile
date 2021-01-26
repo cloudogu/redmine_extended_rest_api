@@ -47,10 +47,9 @@ RUN set -eux; \
 	\
 	# add gem for test execution
 	echo "gem 'minitest'" >> Gemfile; \
-	echo "gem 'swagger-docs'" >> Gemfile; \
 	bundle install --jobs "$(nproc)"; \
 	# generate lock files for different adapter types
-	for adapter in mysql2 postgresql sqlserver sqlite3; do \
+	for adapter in postgresql; do \
 		echo "$RAILS_ENV:" > ./config/database.yml; \
 		echo "  adapter: $adapter" >> ./config/database.yml; \
 		bundle install --jobs "$(nproc)" --without development test; \
