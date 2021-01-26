@@ -1,22 +1,8 @@
 version: "3.1"
 
 services:
-  redmine:
-#    image: redmine:4.1.1
-    build:
-      context: .
-    restart: always
-    ports:
-    - 3000:3000
-    volumes:
-    - ../:/usr/src/redmine/plugins/redmine_extended_rest_api
-    environment:
-      REDMINE_DB_POSTGRES: postgresql
-      REDMINE_DB_USERNAME: testuser
-      REDMINE_DB_PASSWORD: testpw
   postgresql:
     image: postgres:12.5-alpine
-    restart: always
     environment:
       POSTGRES_USER: testuser
       POSTGRES_PASSWORD: testpwd
