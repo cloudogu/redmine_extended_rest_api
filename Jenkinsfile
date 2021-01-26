@@ -12,7 +12,6 @@ node {
             def networtArg = "--network ${buildNetwork}"
             sh 'echo "Start build..."'
             stage('Build & Test') {
-                sh "rm TEST-*.xml"
                 def dbContainerName = "db-${JOB_BASE_NAME}-${BUILD_NUMBER}".replaceAll("\\/|%2[fF]", "-")
                 def dbRunArgs = networtArg
                 dbRunArgs += " -e POSTGRES_USER=testuser"
