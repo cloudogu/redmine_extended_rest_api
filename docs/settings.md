@@ -4,6 +4,7 @@
 
 > GET extended_api/settings
 <details>
+<summary>Example</summary>
 
 ```bash
 curl <redmine-host>/extended_api/settings
@@ -14,7 +15,7 @@ curl <redmine-host>/extended_api/settings
 > POST extended_api/settings
 
 <details>
-    <summary>Example</summary>
+<summary>Example</summary>
 
 ```bash
 curl --header "Content-Type: application/json" \
