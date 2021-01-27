@@ -3,8 +3,8 @@ require "minitest/reporters"
 require 'json'
 require File.expand_path(File.dirname(__FILE__) + '/../../../test/test_helper')
 
-Minitest::Reporters.use! [Minitest::Reporters::JUnitReporter.new]
-#
+Minitest::Reporters.use! [Minitest::Reporters::JUnitReporter.new, Minitest::Reporters::DefaultReporter.new]
+
 ActiveRecord::Base.logger = ActiveSupport::Logger.new(STDOUT)
 ActiveRecord::Base.logger.level = :warn
 
