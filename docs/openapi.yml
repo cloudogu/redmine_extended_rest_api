@@ -5,7 +5,7 @@ info:
 servers:
   - url: http://localhost:3000/extended_api
     description: local development instance
-  - url: http://192.168.56.2/redmine/extended_api
+  - url: https://192.168.56.2/redmine/extended_api
     description: local development instance inside a CES
 paths:
   /v1/settings:
@@ -73,6 +73,10 @@ paths:
                   }
 
 components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
   schemas:
     SettingsParam:
       type: object
@@ -109,3 +113,6 @@ components:
       properties:
         errors:
           type: string
+
+security:
+  - basicAuth: []
