@@ -13,8 +13,7 @@ paths:
       summary: List all available settings
       responses:
         '200':
-          description: |-
-            200 response
+          description: all available settings will be returned
           content:
             application/json:
               examples:
@@ -43,5 +42,70 @@ paths:
                       ]
                     }
         '401':
-          description: |-
-            401 response
+          description: unauthorized access
+    post:
+      summary: Add or update one or more settings
+      responses:
+        204:
+          description: the sent data is valid and was saved successfully
+        400:
+          description: the sent data contains invalid values and cannot be processed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: unauthorized access
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SettingsParam"
+            examples:
+              app_title:
+                summary: add or update the app title setting
+                value:
+                  {
+                    "settings": {
+                      "app_title": "Megamine",
+                      "default_language": "de"
+                    }
+                  }
+
+components:
+  schemas:
+    SettingsParam:
+      type: object
+      properties:
+        settings:
+          description: all settings can be passed as simple key value pair inside the settings object
+          minProperties: 1
+          type: object
+          properties:
+            key:
+              type: string
+            value:
+              type: string
+    Settings:
+      type: object
+      properties:
+        settings:
+          type: array
+          items:
+            $ref: "#/components/schemas/Setting"
+    Setting:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        value:
+          type: string
+        updated_on:
+          type: string
+    Error:
+      type: object
+      properties:
+        errors:
+          type: string
