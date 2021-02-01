@@ -4,7 +4,7 @@ class ExtendedSettingsControllerTest < ActionController::TestCase
   fixtures :settings
   fixtures :users
 
-  def test_show_unauth
+  test "show responds with unauthorized" do
     authHeader = { :Authorization => "Basic YWRtaW46YWRtaW1=" }
     request.headers.merge! authHeader
     contentTypeHeader = { "Content-Type" => "application/json" }
@@ -17,7 +17,7 @@ class ExtendedSettingsControllerTest < ActionController::TestCase
     assert_response :unauthorized
   end
 
-  def test_show
+  test "show returns a list of available settings" do
     authHeader = { :Authorization => "Basic YWRtaW46YWRtaW4=" }
     request.headers.merge! authHeader
 
@@ -28,7 +28,7 @@ class ExtendedSettingsControllerTest < ActionController::TestCase
     assert_contains settings, "app_title", "Megamine"
   end
 
-  def test_create
+  test "create updates the app_title setting" do
     authHeader = { :Authorization => "Basic YWRtaW46YWRtaW4=" }
     request.headers.merge! authHeader
     contentTypeHeader = { "Content-Type" => "application/json" }
@@ -46,7 +46,7 @@ class ExtendedSettingsControllerTest < ActionController::TestCase
     assert_contains settings, "app_title", "Minimine"
   end
 
-  def test_create_unauth
+  test "create responds with unauthorized" do
     authHeader = { :Authorization => "Basic YWRtaW46YWRtaW1=" }
     request.headers.merge! authHeader
     contentTypeHeader = { "Content-Type" => "application/json" }
@@ -60,7 +60,7 @@ class ExtendedSettingsControllerTest < ActionController::TestCase
     assert_response :unauthorized
   end
 
-  def test_create_error_on_invalid_body
+  test "create fails if no settings were provided" do
     authHeader = { :Authorization => "Basic YWRtaW46YWRtaW4=" }
     request.headers.merge! authHeader
     contentTypeHeader = { "Content-Type" => "application/json" }
@@ -70,11 +70,11 @@ class ExtendedSettingsControllerTest < ActionController::TestCase
     post :create, body: json
 
     parsed_response = @response.json_body
-    assert_response 400
+    assert_response :bad_request
     assert_equal "no settings provided", parsed_response['errors']
   end
 
-  def test_create_error_on_invalid_setting
+  test "create fails with validation error" do
     authHeader = { :Authorization => "Basic YWRtaW46YWRtaW4=" }
     request.headers.merge! authHeader
     contentTypeHeader = { "Content-Type" => "application/json" }

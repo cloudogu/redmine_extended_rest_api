@@ -19,18 +19,32 @@ class ActionDispatch::TestResponse
 end
 
 module MiniTest::Assertions
-  def assert_contains collection, key, value
-    contains_kv_pair, message = contains_setting_with_value(collection, key, value)
+  def assert_contains settings, key, value
+    contains_kv_pair, message = contains_setting_with_value(settings, key, value)
+    assert contains_kv_pair, message
+  end
+  def assert_contains_entry collection, key, value
+    contains_kv_pair, message = contains_entry_with_value(collection, key, value)
     assert contains_kv_pair, message
   end
 end
 
 def contains_setting_with_value(settings, key, value)
-  return false, "the given settings are empty" if settings.empty?
+  return false, "the given set of setting is empty" if settings.empty?
   settings.each do |setting|
     if setting['name'] == key && setting['value'] == value
       return true, ""
     end
   end
-  [false, "settings does not contain the key '#{key}' with the value '#{value}'"]
+  [false, "the settings collection does not contain the key '#{key}' with the value '#{value}'"]
+end
+
+def contains_entry_with_value(collection, key, value)
+  return false, "the given collection is empty" if collection.empty?
+  collection.each do |entry|
+    if entry[key] == value
+      return true, ""
+    end
+  end
+  [false, "the collection does not contain the key '#{key}' with the value '#{value}'"]
 end
