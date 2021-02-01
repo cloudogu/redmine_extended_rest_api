@@ -1,0 +1,11 @@
+---
+issue_statuses_001:
+  id: 55
+  name: New
+  is_closed: false
+  position: 1
+issue_statuses_002:
+  id: 66
+  name: Assigned
+  is_closed: false
+  position: 2

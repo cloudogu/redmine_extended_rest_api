@@ -4,6 +4,7 @@ class ExtendedTrackersControllerTest < ActionController::TestCase
   fixtures :settings
   fixtures :users
   fixtures :trackers
+  fixtures :issue_statuses
 
   def test_show_unauth
     authHeader = { :Authorization => "Basic YWRtaW46YWRtaW1=" }
@@ -27,6 +28,7 @@ class ExtendedTrackersControllerTest < ActionController::TestCase
     assert_response :success, @response.body
     trackers = @response.json_body
     contains_entry_with_value trackers, "name", "Feature request"
+    assert_contains_entry trackers, { "name" => "Feature request" }
   end
 
   test "create inserts a new tracker" do
@@ -35,7 +37,7 @@ class ExtendedTrackersControllerTest < ActionController::TestCase
     contentTypeHeader = { "Content-Type" => "application/json" }
     request.headers.merge! contentTypeHeader
 
-    json = { tracker: { name: "megabug", "default_status_id": 1, "description": "my description" }}.to_json
+    json = { tracker: { name: "megabug", "default_status_id": 55, "description": "my description" }}.to_json
     post :create, body: json
 
     assert_response :created
@@ -44,7 +46,7 @@ class ExtendedTrackersControllerTest < ActionController::TestCase
 
     assert_response :success, @response.body
     trackers = @response.json_body
-    contains_entry_with_value trackers, "name", "megabug"
+    assert_contains_entry trackers, { "name" => "megabug", "description" => "my description", "default_status_id" => 55 }
   end
 
   test "create fails if default status is missing" do

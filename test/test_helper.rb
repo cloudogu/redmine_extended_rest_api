@@ -23,9 +23,17 @@ module MiniTest::Assertions
     contains_kv_pair, message = contains_setting_with_value(settings, key, value)
     assert contains_kv_pair, message
   end
-  def assert_contains_entry collection, key, value
-    contains_kv_pair, message = contains_entry_with_value(collection, key, value)
-    assert contains_kv_pair, message
+  def assert_contains_entry(collection, pairs = Hash.new)
+    contains_kv_pair = true
+    collection.each do |entry|
+      contains_kv_pair = true
+      pairs.each do |kv_pair|
+        key, value = kv_pair
+        contains_kv_pair &&= entry[key] == value
+      end
+      break if contains_kv_pair
+    end
+    assert contains_kv_pair, "the collection does not contain an entry with the given fields: %s" % pairs
   end
 end
 
