@@ -62,4 +62,18 @@ class ExtendedTrackersControllerTest < ActionController::TestCase
     assert_response :bad_request
     assert_equal ["muss ausgefüllt werden"], parsed_response['errors']['default_status']
   end
+
+  test "create fails if tracker already exists" do
+    authHeader = { :Authorization => "Basic YWRtaW46YWRtaW4=" }
+    request.headers.merge! authHeader
+    contentTypeHeader = { "Content-Type" => "application/json" }
+    request.headers.merge! contentTypeHeader
+
+    json = { tracker: { name: "Bug", "default_status_id": 55, "description": "my description" }}.to_json
+    post :create, body: json
+
+    parsed_response = @response.json_body
+    assert_response :bad_request
+    assert_equal ["ist bereits vergeben"], parsed_response['errors']['name']
+  end
 end

@@ -29,11 +29,20 @@ module MiniTest::Assertions
       contains_kv_pair = true
       pairs.each do |kv_pair|
         key, value = kv_pair
-        contains_kv_pair &&= entry[key] == value
+        contains_kv_pair = contains_kv_pair && entry[key] == value
       end
       break if contains_kv_pair
     end
     assert contains_kv_pair, "the collection does not contain an entry with the given fields: %s" % pairs
+  end
+  def assert_contains_error(errors, name, message)
+    contains_error = false
+    puts errors
+    errors.each do |entry|
+      puts entry
+      contains_error = contains_error || entry[name] == [message]
+    end
+    assert contains_error, "error message '#{message}' not found for key '#{name}'"
   end
 end
 
