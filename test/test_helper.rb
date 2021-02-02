@@ -35,6 +35,18 @@ module MiniTest::Assertions
     end
     assert contains_kv_pair, "the collection does not contain an entry with the given fields: %s" % pairs
   end
+  def assert_not_contains_entry(collection, pairs = Hash.new)
+    contains_kv_pair = false
+    collection.each do |entry|
+      contains_kv_pair = false
+      pairs.each do |kv_pair|
+        key, value = kv_pair
+        contains_kv_pair = contains_kv_pair || entry[key].to_s == value.to_s
+      end
+      break if contains_kv_pair
+    end
+    assert !contains_kv_pair, "the collection contains at least one entry with the given fields: #{pairs}"
+  end
   def assert_contains_error(errors, name, message)
     contains_error = false
     puts errors

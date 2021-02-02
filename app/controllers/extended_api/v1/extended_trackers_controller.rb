@@ -3,7 +3,7 @@ module ExtendedApi
     class ExtendedTrackersController < ApplicationController
       before_action :require_login
       skip_before_action :verify_authenticity_token
-      accept_api_auth :create, :show, :update
+      accept_api_auth :create, :show, :update, :destroy
 
       def show
         render :json => Tracker.sorted
@@ -38,6 +38,20 @@ module ExtendedApi
           else
             render :status => :bad_request, :json => { errors: @tracker.errors }
           end
+        end
+      end
+
+      def destroy
+        @tracker = Tracker.find(params[:id])
+        begin
+          if @tracker.destroy
+            render :status => :no_content, :json => {}
+          else
+            render :status => :bad_request, :json => { errors: @tracker.errors }
+          end
+        rescue StandardError => e
+          # we need to catch the error otherwise it would lead to an unhandled server error
+          render :status => :bad_request, :json => { errors: e }
         end
       end
     end

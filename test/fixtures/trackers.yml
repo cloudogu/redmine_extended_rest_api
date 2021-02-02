@@ -3,7 +3,7 @@ trackers_001:
   name: Bug
   id: 1
   is_in_chlog: true
-  default_status_id: 1
+  default_status_id: 66
   position: 1
   description: Description for Bug tracker
 trackers_002:
@@ -24,4 +24,16 @@ trackers_004:
   id: 4
   is_in_chlog: false
   default_status_id: 55
+  position: 4
+trackers_005:
+  name: Delete Me!
+  id: 5
+  is_in_chlog: false
+  default_status_id: 55
+  position: 4
+trackers_006:
+  name: Don't touch this!
+  id: 6
+  is_in_chlog: false
+  default_status_id: 1
   position: 4
