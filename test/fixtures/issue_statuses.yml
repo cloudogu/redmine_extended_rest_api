@@ -9,3 +9,23 @@ issue_statuses_002:
   name: Assigned
   is_closed: false
   position: 2
+issue_statuses_003:
+  id: 77
+  name: Duplicate
+  is_closed: false
+  position: 3
+issue_statuses_004:
+  id: 88
+  name: UpdateClosedFlag
+  is_closed: true
+  position: 4
+issue_statuses_005:
+  id: 99
+  name: DeleteMe
+  is_closed: false
+  position: 5
+issue_statuses_006:
+  id: 111
+  name: Don't touch this!
+  is_closed: false
+  position: 6

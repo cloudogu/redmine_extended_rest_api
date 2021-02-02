@@ -24,16 +24,23 @@ trackers_004:
   id: 4
   is_in_chlog: false
   default_status_id: 55
-  position: 4
+  position: 5
 trackers_005:
   name: Delete Me!
   id: 5
   is_in_chlog: false
   default_status_id: 55
-  position: 4
+  position: 6
 trackers_006:
   name: Don't touch this!
   id: 6
   is_in_chlog: false
   default_status_id: 1
-  position: 4
+  position: 7
+trackers_007:
+  name: Don't delete!
+  description: The used issue status cannot be deleted.
+  id: 7
+  is_in_chlog: false
+  default_status_id: 111
+  position: 8
