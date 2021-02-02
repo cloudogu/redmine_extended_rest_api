@@ -1,8 +1,13 @@
 # Plugin's routes
 # See: http://guides.rubyonrails.org/routing.html
 
-match 'extended_api/v1/settings', :controller => 'extended_settings', :action => 'create', :via => [:post]
-match 'extended_api/v1/settings', :controller => 'extended_settings', :action => 'show', :via => [:get]
+namespace :extended_api do
+  namespace :v1 do
+    get 'settings', action: :show, controller: 'extended_settings'
+    post 'settings', action: :create, controller: 'extended_settings'
 
-match 'extended_api/v1/trackers', :controller => 'extended_trackers', :action => 'show', :via => [:get]
-match 'extended_api/v1/trackers', :controller => 'extended_trackers', :action => 'create', :via => [:post]
+    patch 'trackers', action: :update, controller: 'extended_trackers'
+    post 'trackers', action: :create, controller: 'extended_trackers'
+    get 'trackers', action: :show, controller: 'extended_trackers'
+  end
+end

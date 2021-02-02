@@ -29,7 +29,7 @@ module MiniTest::Assertions
       contains_kv_pair = true
       pairs.each do |kv_pair|
         key, value = kv_pair
-        contains_kv_pair = contains_kv_pair && entry[key] == value
+        contains_kv_pair = contains_kv_pair && entry[key].to_s == value.to_s
       end
       break if contains_kv_pair
     end

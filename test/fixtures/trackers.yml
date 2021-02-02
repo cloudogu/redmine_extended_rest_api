@@ -19,3 +19,9 @@ trackers_003:
   is_in_chlog: false
   default_status_id: 1
   position: 3
+trackers_004:
+  name: Bug Request
+  id: 4
+  is_in_chlog: false
+  default_status_id: 55
+  position: 4
