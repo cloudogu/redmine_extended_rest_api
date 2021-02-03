@@ -3,6 +3,8 @@
 
 namespace :extended_api do
   namespace :v1 do
+    get 'spec', :to => redirect('plugin_assets/redmine_extended_rest_api/openapi.yml')
+
     get 'settings', action: :show, controller: 'extended_settings'
     post 'settings', action: :create, controller: 'extended_settings'
 

@@ -16,31 +16,11 @@ paths:
           description: all available settings will be returned
           content:
             application/json:
+              schema:
+                $ref: "#/components/schemas/Settings"
               examples:
                 simple:
-                  value:
-                    {
-                      "settings": [
-                        {
-                          "id": 1,
-                          "name": "app_title",
-                          "value": "MegaMine",
-                          "updated_on": "2021-01-26T17:21:45.517Z"
-                        },
-                        {
-                          "id": 2,
-                          "name": "rest_api_enabled",
-                          "value": "1",
-                          "updated_on": "2021-01-22T13:03:42.479Z"
-                        },
-                        {
-                          "id": 3,
-                          "name": "protocol",
-                          "value": "https",
-                          "updated_on": "2021-01-22T13:03:42.498Z"
-                        },
-                      ]
-                    }
+                  $ref: "#/components/examples/settingsExample"
         '401':
           description: unauthorized access
     post:
@@ -71,8 +51,73 @@ paths:
                       "default_language": "de"
                     }
                   }
-
+  /v1/workflows:
+    get:
+      summary: List all available workflow transitions
+      responses:
+        '200':
+          description: all available workflow transitions will be returned
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkflowTransition"
+              examples:
+                simple:
+                  $ref: "#/components/examples/wtExample"
+        '401':
+          description: unauthorized access
 components:
+  examples:
+    wtExample:
+      value:
+        [
+          {
+            "id": 11,
+            "tracker_id": 1,
+            "old_status_id": 3,
+            "new_status_id": 1,
+            "role_id": 1,
+            "assignee": false,
+            "author": false,
+            "field_name": null,
+            "rule": null
+          },
+          {
+            "id": 12,
+            "tracker_id": 1,
+            "old_status_id": 3,
+            "new_status_id": 2,
+            "role_id": 1,
+            "assignee": false,
+            "author": false,
+            "field_name": null,
+            "rule": null
+          }
+        ]
+    settingsExample:
+      value:
+        {
+          "settings": [
+            {
+              "id": 1,
+              "name": "app_title",
+              "value": "MegaMine",
+              "updated_on": "2021-01-26T17:21:45.517Z"
+            },
+            {
+              "id": 2,
+              "name": "rest_api_enabled",
+              "value": "1",
+              "updated_on": "2021-01-22T13:03:42.479Z"
+            },
+            {
+              "id": 3,
+              "name": "protocol",
+              "value": "https",
+              "updated_on": "2021-01-22T13:03:42.498Z"
+            },
+          ]
+        }
   securitySchemes:
     basicAuth:
       type: http
@@ -107,6 +152,25 @@ components:
         value:
           type: string
         updated_on:
+          type: string
+    WorkflowTransition:
+      type: object
+      properties:
+        id:
+          type: integer
+        tracker_id:
+          type: integer
+        old_status_id:
+          type: integer
+        role_id:
+          type: integer
+        assignee:
+          type: string
+        author:
+          type: string
+        field_name:
+          type: string
+        rule:
           type: string
     Error:
       type: object
