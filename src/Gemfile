@@ -1,7 +1,3 @@
-group :development do
-  source 'https://rubygems.org'
-end
-
 group :test do
   gem 'minitest-reporters'
 end
