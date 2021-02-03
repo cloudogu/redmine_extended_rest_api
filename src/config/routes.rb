@@ -15,5 +15,7 @@ namespace :extended_api do
     post 'issue_statuses', action: :create, controller: 'extended_issue_statuses'
     patch 'issue_statuses', action: :update, controller: 'extended_issue_statuses'
     delete 'issue_statuses', action: :destroy, controller: 'extended_issue_statuses'
+
+    get 'workflows', action: :show, controller: 'extended_workflows'
   end
 end

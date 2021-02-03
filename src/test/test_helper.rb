@@ -49,9 +49,7 @@ module MiniTest::Assertions
   end
   def assert_contains_error(errors, name, message)
     contains_error = false
-    puts errors
     errors.each do |entry|
-      puts entry
       contains_error = contains_error || entry[name] == [message]
     end
     assert contains_error, "error message '#{message}' not found for key '#{name}'"

@@ -63,7 +63,7 @@ COPY dev/create_database_config.rb .
 COPY dev/database.yml.erb .
 RUN ruby create_database_config.rb --host "${DB_HOST}" --path "${WORKDIR}/config/database.yml"
 
-COPY . /usr/src/redmine/plugins/redmine_extended_rest_api
+COPY src/ /usr/src/redmine/plugins/redmine_extended_rest_api
 # install test gems
 RUN  set -eux; \
      bundle install; \
