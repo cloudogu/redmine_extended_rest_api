@@ -17,5 +17,6 @@ namespace :extended_api do
     delete 'issue_statuses', action: :destroy, controller: 'extended_issue_statuses'
 
     get 'workflows', action: :show, controller: 'extended_workflows'
+    patch 'workflows', action: :update, controller: 'extended_workflows'
   end
 end
