@@ -15,7 +15,7 @@ class ExtendedApi::V1::ExtendedWorkflowsControllerTest < ActionController::TestC
   auth_header_wrong = { :Authorization => "Basic YWRtaW46YWRtaW1=" }
   auth_header = { :Authorization => "Basic YWRtaW46YWRtaW4=" }
 
-  test "shows" do
+  test "show lists all available workflow transitions" do
     request.headers.merge! auth_header
     request.headers.merge! content_type_header
 
