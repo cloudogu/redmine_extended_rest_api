@@ -55,7 +55,9 @@ RUN set -eux; \
 		bundle install --jobs "$(nproc)" --without development test; \
 		cp Gemfile.lock "Gemfile.lock.${adapter}"; \
 	done; \
-	rm ./config/database.yml;
+	rm ./config/database.yml; \
+	mkdir -p "${WORKDIR}/public/plugin_assets/redmine_extended_rest_api"; \
+	chmod 777 "${WORKDIR}/public/plugin_assets/redmine_extended_rest_api";
 
 # generate database configuration file base on build arg 'DB_HOST'
 ARG DB_HOST=postgresql
@@ -63,7 +65,7 @@ COPY dev/create_database_config.rb .
 COPY dev/database.yml.erb .
 RUN ruby create_database_config.rb --host "${DB_HOST}" --path "${WORKDIR}/config/database.yml"
 
-COPY src/ /usr/src/redmine/plugins/redmine_extended_rest_api
+COPY src/ /${WORKDIR}/plugins/redmine_extended_rest_api
 # install test gems
 RUN  set -eux; \
      bundle install; \
