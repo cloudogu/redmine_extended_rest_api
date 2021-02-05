@@ -32,6 +32,36 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
     assert_response :unauthorized
   end
 
+  test 'create responds with 401 on unauthorized access' do
+    request.headers.merge! auth_header_wrong
+    request.headers.merge! content_type_header
+    request.headers.merge! accept_header
+
+    post :create
+
+    assert_response :unauthorized
+  end
+
+  test 'update responds with 401 on unauthorized access' do
+    request.headers.merge! auth_header_wrong
+    request.headers.merge! content_type_header
+    request.headers.merge! accept_header
+
+    patch :update
+
+    assert_response :unauthorized
+  end
+
+  test 'destroy responds with 401 on unauthorized access' do
+    request.headers.merge! auth_header_wrong
+    request.headers.merge! content_type_header
+    request.headers.merge! accept_header
+
+    delete :destroy
+
+    assert_response :unauthorized
+  end
+
   test 'show responds with a list of trackers' do
     request.headers.merge! auth_header
 

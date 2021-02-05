@@ -5,6 +5,5 @@ Redmine::Plugin.register :redmine_extended_rest_api do
   description 'This plugin extends the existing rest api with new endpoints to manage Redmine.'
   version '1.0.0'
 
-  settings :default => {}
-
+  settings default: {}
 end

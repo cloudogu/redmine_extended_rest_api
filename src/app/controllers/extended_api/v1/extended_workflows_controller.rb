@@ -19,45 +19,37 @@ module ExtendedApi
           transitions = map_params(params)
           transitions.each do |_, transitions_by_new_status|
             transitions_by_new_status.each do |_, transition_by_rule|
-              transition_by_rule.reject! {|_, transition| transition == 'no_change'}
+              transition_by_rule.reject! { |_, transition| transition == 'no_change' }
             end
           end
-          WorkflowTransition.replace_transitions(@trackers, @roles, transitions)
-        rescue StandardError => e
-          render json: { errors: e, message: e.message }, status: :bad_request
+          result = WorkflowTransition.replace_transitions(@trackers, @roles, transitions)
+          render json: result
+        rescue => e
+          render json: { errors: [e.message] }, status: :bad_request
         end
-        render json: {}, status: :no_content
       end
 
       private
 
       def map_params(request_params)
-        mapped_params = Hash.new
         transitions = request_params[:transitions]
-        transitions.each do |src_transition|
-          source_status_position = find_entry_with_id(@statuses, src_transition['issue_status_id'])
-          target_statuses = Hash.new
-          src_transition[:transitions].each do |target_transition|
-            target_status_position = find_entry_with_id(@statuses, target_transition['issue_status_id'])
-            target_statuses[target_status_position.to_s] = get_types(target_transition['types'])
-          end
-          mapped_params[source_status_position.to_s] = target_statuses
-        end
-        mapped_params
-      end
-
-      def find_entry_with_id(collection, id)
-        collection.each do |entry|
-          return entry['position'] if entry['id'].to_s == id.to_s
+        transitions.each_with_object({}) do |src_trans, mapped_params|
+          target_statuses = get_target_statuses src_trans
+          mapped_params[src_trans['src_status_id']] = target_statuses
         end
       end
 
-      def get_types types
-        type_hash = Hash.new
-        types.each do |type|
-          type_hash[type['name']] = type['value']
+      def get_target_statuses(src_transition)
+        src_transition[:transitions].each_with_object({}) do
+        |target_trans, target_statuses|
+          target_statuses[target_trans['target_status_id']] = map_targets target_trans['types']
         end
-        type_hash
+      end
+
+      def map_targets(type_collection)
+        type_collection.each_with_object({}) do |trans, type_hash|
+          type_hash[trans['name']] = trans['active']
+        end
       end
 
       def find_trackers_roles_and_statuses_for_edit
@@ -87,14 +79,6 @@ module ExtendedApi
       end
 
       def find_statuses
-        @used_statuses_only = (params[:used_statuses_only] == '0' ? false : true)
-        if @trackers && @used_statuses_only
-          role_ids = Role.all.select(&:consider_workflow?).map(&:id)
-          status_ids = WorkflowTransition.where(
-            tracker_id: @trackers.map(&:id), role_id: role_ids
-          ).distinct.pluck(:old_status_id, :new_status_id).flatten.uniq
-          @statuses = IssueStatus.where(id: status_ids).sorted.to_a.presence
-        end
         @statuses ||= IssueStatus.sorted.to_a
       end
     end

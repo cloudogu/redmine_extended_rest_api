@@ -29,3 +29,18 @@ issue_statuses_006:
   name: Don't touch this!
   is_closed: false
   position: 6
+issue_statuses_007:
+  id: 122
+  name: src_status
+  is_closed: false
+  position: 7
+issue_statuses_008:
+  id: 133
+  name: target_status_01
+  is_closed: false
+  position: 8
+issue_statuses_009:
+  id: 144
+  name: target_status_02
+  is_closed: true
+  position: 9
