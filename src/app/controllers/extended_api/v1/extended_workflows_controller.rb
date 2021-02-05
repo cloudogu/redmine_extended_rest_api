@@ -14,7 +14,7 @@ module ExtendedApi
       end
 
       def update
-        find_trackers_roles_and_statuses_for_edit
+        find_trackers_roles_for_edit
         begin
           transitions = params[:transitions]
           transitions.each do |_, transitions_by_new_status|
