@@ -59,50 +59,15 @@ class ExtendedApi::V1::ExtendedWorkflowsControllerTest < ActionController::TestC
       tracker_id: [
         '1'
       ],
-      transitions: [
-        {
-          src_status_id: '122',
-          transitions: [
-            {
-              target_status_id: '133',
-              types: [
-                {
-                  name: 'always',
-                  active: '0'
-                },
-                {
-                  name: 'author',
-                  active: '0'
-                },
-                {
-                  name: 'assignee',
-                  active: '1'
-                }
-              ]
-            },
-            {
-              target_status_id: '144',
-              types: [
-                {
-                  name: 'always',
-                  active: '1'
-                },
-                {
-                  name: 'author',
-                  active: '0'
-                },
-                {
-                  name: 'assignee',
-                  active: '0'
-                }
-              ]
-            }
-          ]
+      transitions: {
+        '122': {
+          '133': { "always": '0', "author": '0', "assignee": '1' },
+          '144': { "always": '1', "author": '0', "assignee": '0' }
         }
-      ],
+      },
     }.to_json
     patch :update, body: json
-    botty = @response.json_body
+
     assert_response :success
 
     get :show
@@ -110,9 +75,17 @@ class ExtendedApi::V1::ExtendedWorkflowsControllerTest < ActionController::TestC
     transitions = @response.json_body
     assert_contains_entry transitions,
                           'role_id' => 1,
+                          'tracker_id' => 1,
                           'old_status_id' => 122,
                           'new_status_id' => 133,
                           'assignee' => true,
+                          'author' => false
+    assert_contains_entry transitions,
+                          'role_id' => 1,
+                          'tracker_id' => 1,
+                          'old_status_id' => 122,
+                          'new_status_id' => 144,
+                          'assignee' => false,
                           'author' => false
   end
 end

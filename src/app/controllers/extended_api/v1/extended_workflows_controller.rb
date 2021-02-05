@@ -16,7 +16,7 @@ module ExtendedApi
       def update
         find_trackers_roles_and_statuses_for_edit
         begin
-          transitions = map_params(params)
+          transitions = params[:transitions]
           transitions.each do |_, transitions_by_new_status|
             transitions_by_new_status.each do |_, transition_by_rule|
               transition_by_rule.reject! { |_, transition| transition == 'no_change' }
@@ -31,31 +31,9 @@ module ExtendedApi
 
       private
 
-      def map_params(request_params)
-        transitions = request_params[:transitions]
-        transitions.each_with_object({}) do |src_trans, mapped_params|
-          target_statuses = get_target_statuses src_trans
-          mapped_params[src_trans['src_status_id']] = target_statuses
-        end
-      end
-
-      def get_target_statuses(src_transition)
-        src_transition[:transitions].each_with_object({}) do
-        |target_trans, target_statuses|
-          target_statuses[target_trans['target_status_id']] = map_targets target_trans['types']
-        end
-      end
-
-      def map_targets(type_collection)
-        type_collection.each_with_object({}) do |trans, type_hash|
-          type_hash[trans['name']] = trans['active']
-        end
-      end
-
-      def find_trackers_roles_and_statuses_for_edit
+      def find_trackers_roles_for_edit
         find_roles
         find_trackers
-        find_statuses
       end
 
       def find_roles
@@ -76,10 +54,6 @@ module ExtendedApi
           @trackers = Tracker.where(id: ids).to_a
         end
         @trackers = nil if @trackers.blank?
-      end
-
-      def find_statuses
-        @statuses ||= IssueStatus.sorted.to_a
       end
     end
   end
