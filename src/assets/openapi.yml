@@ -73,7 +73,88 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Workflows"
+              $ref: "#/components/schemas/Transitions"
+            examples:
+              single:
+                value:
+                  {
+                    "role_id": [ "1" ],
+                    "tracker_id": [ "1" ],
+                    "transitions": {
+                      "123": { "always": "1" }
+                    }
+                  }
+              multiple:
+                value:
+                  {
+                    "role_id": [ "4" ],
+                    "tracker_id": [ "23", "24" ],
+                    "transitions": {
+                      "12": { "always": "1", "author": "1", "assignee": "0" },
+                      "123": { "always": "1", "author": "0", "assignee": "1" }
+                    }
+                  }
+
+  /v1/issue_statuses:
+    get:
+      summary: a
+      tags:
+        - issue statuses
+      responses:
+        200:
+          description: b
+    post:
+      summary: a
+      tags:
+        - issue statuses
+      responses:
+        200:
+          description: b
+    patch:
+      summary: a
+      tags:
+        - issue statuses
+      responses:
+        200:
+          description: b
+    delete:
+      summary: a
+      tags:
+        - issue statuses
+      responses:
+        200:
+          description: b
+
+  /v1/trackers:
+    get:
+      summary: a
+      tags:
+        - trackers
+      responses:
+        200:
+          description: b
+    post:
+      summary: a
+      tags:
+        - trackers
+      responses:
+        200:
+          description: b
+    patch:
+      summary: a
+      tags:
+        - trackers
+      responses:
+        200:
+          description: b
+    delete:
+      summary: a
+      tags:
+        - trackers
+      responses:
+        200:
+          description: b
+
 components:
   examples:
     settingsExample:
@@ -118,7 +199,6 @@ components:
         settings:
           app_title: Megamine
           rest_api_enabled: "1"
-
     Settings:
       type: object
       properties:
@@ -195,7 +275,7 @@ components:
         author: false
         field_name: null
         rule: null
-    Workflows:
+    Transitions:
       type: object
       properties:
         role_id:
@@ -206,42 +286,35 @@ components:
           type: array
           items:
             type: integer
-        used_statuses_only:
-          type: integer
         transitions:
-          type: array
-          items:
-            $ref: "#/components/schemas/TransitionEntity"
-    TransitionEntity:
-      type: object
-      properties:
-        src_status_id:
-          type: integer
-        transitions:
-          type: array
-          items:
+          type: object
+          additionalProperties:
             type: object
-            properties:
-              target_status_id:
-                type: integer
-              types:
-                type: array
-                items:
-                  $ref: "#/components/schemas/WorkflowTransitionType"
-    WorkflowTransitionType:
+            additionalProperties:
+              $ref: "#/components/schemas/Transition"
+    Transition:
       type: object
       properties:
-        name:
+        always:
           type: string
-          enum: [always, author, assignee]
-        active:
+          enum: [ "0", "1" ]
+        author:
           type: string
-          enum: [0, 1]
+          enum: [ "0", "1" ]
+        assignee:
+          type: string
+          enum: [ "0", "1" ]
     Error:
       type: object
       properties:
         errors:
-          type: string
+          type: array
+          items:
+            type: string
+      example:
+        {
+          "errors": ["failed to save data", "item not found"]
+        }
 
 security:
   - basicAuth: []
