@@ -8,6 +8,82 @@ servers:
   - url: https://192.168.56.2/redmine/extended_api
     description: local development instance inside a CES
 paths:
+  /v1/issue_statuses:
+    get:
+      summary: Lists all available issue statuses
+      tags:
+        - issue statuses
+      responses:
+        200:
+          description: all available issue statuses will be returned
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IssueStatuses"
+        401:
+          description: unauthorized access
+    post:
+      summary: Adds a new issue status
+      tags:
+        - issue statuses
+      responses:
+        201:
+          description: issue status was created successfully
+        401:
+          description: unauthorized access
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IssueStatus"
+            example:
+                {
+                  "name": "One-X",
+                  "is_closed": true
+                }
+    patch:
+      summary: Updates an existing issue status
+      tags:
+        - issue statuses
+      responses:
+        200:
+          description: returns the updated issue status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IssueStatus"
+              example:
+                {
+                  "id": 1,
+                  "name": "Two-X",
+                  "is_closed": false
+                }
+        401:
+          description: unauthorized access
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IssueStatus"
+    delete:
+      summary: Deletes an issue status
+      tags:
+        - issue statuses
+      responses:
+        200:
+          description: returns the deleted issue status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IssueStatuse"
+        400:
+          description: the issue status could not be deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: unauthorized access
   /v1/settings:
     get:
       summary: List all available settings
@@ -45,7 +121,80 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/SettingsParam"
-
+  /v1/trackers:
+    get:
+      summary: List all available trackers
+      tags:
+        - trackers
+      responses:
+        200:
+          description: all available trackers will be returned
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Trackers"
+        401:
+          description: unauthorized access
+    post:
+      summary: Adds a new tracker
+      tags:
+        - trackers
+      responses:
+        201:
+          description: issue status was created successfully
+        401:
+          description: unauthorized access
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Tracker"
+            example:
+              {
+                "name": "new feature tracker"
+              }
+    patch:
+      summary: Updates an existing tracker
+      tags:
+        - trackers
+      responses:
+        200:
+          description: returns the updated tracker
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tracker"
+        401:
+          description: unauthorized access
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Tracker"
+            example:
+              {
+                "id": 1,
+                 "name": "tracker to update"
+              }
+    delete:
+      summary: Deletes a tracker
+      tags:
+        - trackers
+      responses:
+        200:
+          description: returns the deleted tracker
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tracker"
+        400:
+          description: the tracker could not be deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: unauthorized access
   /v1/workflows:
     get:
       summary: List all available workflow transitions
@@ -94,67 +243,6 @@ paths:
                       "123": { "always": "1", "author": "0", "assignee": "1" }
                     }
                   }
-
-  /v1/issue_statuses:
-    get:
-      summary: a
-      tags:
-        - issue statuses
-      responses:
-        200:
-          description: b
-    post:
-      summary: a
-      tags:
-        - issue statuses
-      responses:
-        200:
-          description: b
-    patch:
-      summary: a
-      tags:
-        - issue statuses
-      responses:
-        200:
-          description: b
-    delete:
-      summary: a
-      tags:
-        - issue statuses
-      responses:
-        200:
-          description: b
-
-  /v1/trackers:
-    get:
-      summary: a
-      tags:
-        - trackers
-      responses:
-        200:
-          description: b
-    post:
-      summary: a
-      tags:
-        - trackers
-      responses:
-        200:
-          description: b
-    patch:
-      summary: a
-      tags:
-        - trackers
-      responses:
-        200:
-          description: b
-    delete:
-      summary: a
-      tags:
-        - trackers
-      responses:
-        200:
-          description: b
-
 components:
   examples:
     settingsExample:
@@ -186,6 +274,46 @@ components:
       type: http
       scheme: basic
   schemas:
+    Trackers:
+      type: array
+      items:
+        $ref: "#/components/schemas/Tracker"
+    Tracker:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        position:
+          type: integer
+        is_in_roadmap:
+          type: boolean
+        default_status_id:
+          type: integer
+        description:
+          type: string
+        is_in_chlog:
+          type: boolean
+        fields_bits:
+          type: integer
+    IssueStatuses:
+      type: array
+      items:
+        $ref: "#/components/schemas/IssueStatus"
+    IssueStatus:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        is_closed:
+          type: boolean
+        position:
+          type: integer
+        default_done_ratio:
+          type: object
     SettingsParam:
       type: object
       properties:

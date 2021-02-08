@@ -16,10 +16,10 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
   auth_header = { :Authorization => 'Basic YWRtaW46YWRtaW4=' }
 
   test 'check for correct route generation' do
-    assert_routing({ method: :get, path: 'extended_api/v1/trackers' }, { controller: 'extended_api/v1/extended_trackers', action: 'show' })
-    assert_routing({ method: :post, path: 'extended_api/v1/trackers' }, { controller: 'extended_api/v1/extended_trackers', action: 'create' })
-    assert_routing({ method: :patch, path: 'extended_api/v1/trackers' }, { controller: 'extended_api/v1/extended_trackers', action: 'update' })
-    assert_routing({ method: :delete, path: 'extended_api/v1/trackers' }, { controller: 'extended_api/v1/extended_trackers', action: 'destroy' })
+    assert_routing({ method: :get, path: 'extended_api/v1/trackers' }, controller: 'extended_api/v1/extended_trackers', action: 'show')
+    assert_routing({ method: :post, path: 'extended_api/v1/trackers' }, controller: 'extended_api/v1/extended_trackers', action: 'create')
+    assert_routing({ method: :patch, path: 'extended_api/v1/trackers' }, controller: 'extended_api/v1/extended_trackers', action: 'update')
+    assert_routing({ method: :delete, path: 'extended_api/v1/trackers' }, controller: 'extended_api/v1/extended_trackers', action: 'destroy')
   end
 
   test 'show responds with 401 on unauthorized access' do
@@ -70,7 +70,7 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
     assert_response :success, @response.body
     trackers = @response.json_body
     contains_entry_with_value trackers, 'name', 'Feature request'
-    assert_contains_entry trackers, { 'name' => 'Feature request' }
+    assert_contains_entry trackers, 'name' => 'Feature request'
   end
 
   test 'create inserts a new tracker' do
@@ -86,7 +86,7 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
 
     assert_response :success, @response.body
     trackers = @response.json_body
-    assert_contains_entry trackers, { 'name' => 'megabug', 'description' => 'my description', 'default_status_id' => 55 }
+    assert_contains_entry trackers, 'name' => 'megabug', 'description' => 'my description', 'default_status_id' => 55
   end
 
   test 'create fails if default status is missing' do
@@ -121,13 +121,13 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
     patch :update, body: json
 
     assert_response :success
-    trackers = @response.json_body
-    assert_contains_entry [trackers['tracker']], { 'id' => 4, 'name' => 'Bug Request', 'description' => 'my description', 'default_status_id' => 55 }
+    tracker = @response.json_body
+    assert_contains_entry [tracker], 'id' => 4, 'name' => 'Bug Request', 'description' => 'my description', 'default_status_id' => 55
 
     get :show
     assert_response :success, @response.body
     trackers = @response.json_body
-    assert_contains_entry trackers, { 'id' => 4, 'name' => 'Bug Request', 'description' => 'my description', 'default_status_id' => 55 }
+    assert_contains_entry trackers, 'id' => 4, 'name' => 'Bug Request', 'description' => 'my description', 'default_status_id' => 55
   end
 
   test 'destroy deletes a specific tracker' do
@@ -137,13 +137,15 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
     json = { id: 5 }.to_json
     delete :destroy, body: json
 
-    assert_response :no_content
+    assert_response :success
+    tracker_data = @response.json_body
+    assert_contains_entry [tracker_data], 'id' => 5, 'default_status_id' => '55', 'name' => 'Delete Me!'
 
     get :show
 
     assert_response :success, @response.body
     trackers = @response.json_body
-    assert_not_contains_entry trackers, { 'id' => 5 }
+    assert_not_contains_entry trackers, 'id' => 5
   end
 
   test 'destroy fails deleting a tracker with related issue' do
@@ -155,12 +157,12 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
 
     parsed_response = @response.json_body
     assert_response :bad_request
-    assert_equal 'Cannot delete tracker', parsed_response['errors']
+    assert_equal ['Cannot delete tracker'], parsed_response['errors']
 
     get :show
 
     assert_response :success, @response.body
     trackers = @response.json_body
-    assert_contains_entry trackers, { 'id' => 6 }
+    assert_contains_entry trackers, 'id' => 6
   end
 end

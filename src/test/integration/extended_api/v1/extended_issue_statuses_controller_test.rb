@@ -16,10 +16,10 @@ class ExtendedApi::V1::ExtendedIssueStatusesControllerTest < ActionController::T
   auth_header = { :Authorization => 'Basic YWRtaW46YWRtaW4=' }
 
   test 'check for correct route generation' do
-    assert_routing({ method: :get, path: 'extended_api/v1/issue_statuses' }, { controller: 'extended_api/v1/extended_issue_statuses', action: 'show' })
-    assert_routing({ method: :post, path: 'extended_api/v1/issue_statuses' }, { controller: 'extended_api/v1/extended_issue_statuses', action: 'create' })
-    assert_routing({ method: :patch, path: 'extended_api/v1/issue_statuses' }, { controller: 'extended_api/v1/extended_issue_statuses', action: 'update' })
-    assert_routing({ method: :delete, path: 'extended_api/v1/issue_statuses' }, { controller: 'extended_api/v1/extended_issue_statuses', action: 'destroy' })
+    assert_routing({ method: :get, path: 'extended_api/v1/issue_statuses' }, controller: 'extended_api/v1/extended_issue_statuses', action: 'show')
+    assert_routing({ method: :post, path: 'extended_api/v1/issue_statuses' }, controller: 'extended_api/v1/extended_issue_statuses', action: 'create')
+    assert_routing({ method: :patch, path: 'extended_api/v1/issue_statuses' }, controller: 'extended_api/v1/extended_issue_statuses', action: 'update')
+    assert_routing({ method: :delete, path: 'extended_api/v1/issue_statuses' }, controller: 'extended_api/v1/extended_issue_statuses', action: 'destroy')
   end
 
   test 'show responds with 401 on unauthorized access' do
@@ -39,7 +39,7 @@ class ExtendedApi::V1::ExtendedIssueStatusesControllerTest < ActionController::T
 
     assert_response :success, @response.body
     issue_statuses = @response.json_body
-    assert_contains_entry issue_statuses, { 'name' => 'Assigned' }
+    assert_contains_entry issue_statuses, 'name' => 'Assigned'
   end
 
   test 'create inserts a new issue status' do
@@ -55,7 +55,7 @@ class ExtendedApi::V1::ExtendedIssueStatusesControllerTest < ActionController::T
 
     assert_response :success, @response.body
     issue_statuses = @response.json_body
-    assert_contains_entry issue_statuses, { 'name' => 'test-status-001', 'is_closed' => 'true' }
+    assert_contains_entry issue_statuses, 'name' => 'test-status-001', 'is_closed' => 'true'
   end
 
   test 'create fails if name is missing' do
@@ -88,14 +88,14 @@ class ExtendedApi::V1::ExtendedIssueStatusesControllerTest < ActionController::T
 
     status_id = 88
 
-    json = { id: status_id, issue_status: { "is_closed": '0' } }.to_json
+    json = { id: status_id, "is_closed": false }.to_json
     patch :update, body: json
 
-    expected_fields = { 'id' => status_id, 'name' => 'UpdateClosedFlag', 'is_closed' => 'false' }
+    expected_fields = { 'id' => status_id, 'name' => 'UpdateClosedFlag', 'is_closed' => false }
 
     assert_response :success
     issue_status = @response.json_body
-    assert_contains_entry [issue_status['issue_status']], expected_fields
+    assert_contains_entry [issue_status], expected_fields
 
     get :show
     assert_response :success, @response.body
@@ -110,13 +110,15 @@ class ExtendedApi::V1::ExtendedIssueStatusesControllerTest < ActionController::T
     json = { id: 99 }.to_json
     delete :destroy, body: json
 
-    assert_response :no_content
+    assert_response :success
+    issue_status_id = @response.json_body
+    assert_equal 99.to_s, issue_status_id['id'].to_s
 
     get :show
 
     assert_response :success, @response.body
     issue_statuses = @response.json_body
-    assert_not_contains_entry issue_statuses, { 'id' => 99 }
+    assert_not_contains_entry issue_statuses, 'id' => 99
   end
 
   test 'destroy fails deleting an issue status with related tracker' do
@@ -128,13 +130,13 @@ class ExtendedApi::V1::ExtendedIssueStatusesControllerTest < ActionController::T
 
     parsed_response = @response.json_body
     assert_response :bad_request
-    expected_error = 'Der Ticket-Status konnte nicht gelöscht werden. (This status is used as the default status by some trackers)'
+    expected_error = ['Der Ticket-Status konnte nicht gelöscht werden. (This status is used as the default status by some trackers)']
     assert_equal expected_error, parsed_response['errors']
 
     get :show
 
     assert_response :success, @response.body
     trackers = @response.json_body
-    assert_contains_entry trackers, { 'id' => 111 }
+    assert_contains_entry trackers, 'id' => 111
   end
 end
