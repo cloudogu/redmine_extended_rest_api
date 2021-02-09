@@ -75,7 +75,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/IssueStatuse"
+                $ref: "#/components/schemas/IssueStatus"
         400:
           description: the issue status could not be deleted
           content:
