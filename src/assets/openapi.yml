@@ -230,7 +230,9 @@ paths:
                     "role_id": [ "1" ],
                     "tracker_id": [ "1" ],
                     "transitions": {
-                      "123": { "always": "1" }
+                      "123": {
+                        "1": { "always": "1" }
+                      }
                     }
                   }
               multiple:
@@ -239,8 +241,12 @@ paths:
                     "role_id": [ "4" ],
                     "tracker_id": [ "23", "24" ],
                     "transitions": {
-                      "12": { "always": "1", "author": "1", "assignee": "0" },
-                      "123": { "always": "1", "author": "0", "assignee": "1" }
+                      "12": {
+                        "1": { "always": "1", "author": "1", "assignee": "0" }
+                      },
+                      "123": {
+                        "12": { "always": "1", "author": "0", "assignee": "1" }
+                      }
                     }
                   }
 components:
