@@ -14,7 +14,7 @@ module ExtendedApi
           render :status => :bad_request, :json => { errors: 'no issue status data provided' }
         else
           @issue_status = IssueStatus.new
-          @issue_status.safe_attributes = params[:issue_status]
+          @issue_status.safe_attributes = params
           if @issue_status.save
             render json: {}, status: :created
           else

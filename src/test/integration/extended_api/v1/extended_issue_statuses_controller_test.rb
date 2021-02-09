@@ -46,7 +46,7 @@ class ExtendedApi::V1::ExtendedIssueStatusesControllerTest < ActionController::T
     request.headers.merge! auth_header
     request.headers.merge! content_type_header
 
-    json = { issue_status: { name: 'test-status-001', "is_closed": '1' } }.to_json
+    json = { name: 'test-status-001', "is_closed": '1' }.to_json
     post :create, body: json
 
     assert_response :created
@@ -74,7 +74,7 @@ class ExtendedApi::V1::ExtendedIssueStatusesControllerTest < ActionController::T
     request.headers.merge! auth_header
     request.headers.merge! content_type_header
 
-    json = { issue_status: { name: 'Duplicate' } }.to_json
+    json = { name: 'Duplicate' }.to_json
     post :create, body: json
 
     parsed_response = @response.json_body
