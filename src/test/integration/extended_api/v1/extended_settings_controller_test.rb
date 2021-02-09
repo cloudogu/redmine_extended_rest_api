@@ -11,7 +11,7 @@ class ExtendedApi::V1::ExtendedSettingsControllerTest < ActionController::TestCa
 
   test 'check for correct route generation' do
     assert_routing({ method: :get, path: 'extended_api/v1/settings' }, { controller: 'extended_api/v1/extended_settings', action: 'show' })
-    assert_routing({ method: :post, path: 'extended_api/v1/settings' }, { controller: 'extended_api/v1/extended_settings', action: 'create' })
+    assert_routing({ method: :put, path: 'extended_api/v1/settings' }, { controller: 'extended_api/v1/extended_settings', action: 'update' })
   end
 
   test 'show responds with 401 on unauthorized access' do
@@ -34,12 +34,12 @@ class ExtendedApi::V1::ExtendedSettingsControllerTest < ActionController::TestCa
     assert_contains settings, 'app_title', 'Megamine'
   end
 
-  test 'create updates the app_title setting' do
+  test 'update updates the app_title setting' do
     request.headers.merge! auth_header
     request.headers.merge! content_type_header
 
     json = { settings: { app_title: 'Minimine' } }.to_json
-    post :create, body: json
+    put :update, body: json
 
     assert_response :no_content
 
@@ -50,35 +50,35 @@ class ExtendedApi::V1::ExtendedSettingsControllerTest < ActionController::TestCa
     assert_contains settings, 'app_title', 'Minimine'
   end
 
-  test 'create responds with unauthorized' do
+  test 'update responds with unauthorized' do
     request.headers.merge! auth_header_wrong
     request.headers.merge! content_type_header
     request.headers.merge! accept_header
 
     json = {}.to_json
-    post :create, body: json
+    put :update, body: json
 
     assert_response :unauthorized
   end
 
-  test 'create fails if no settings were provided' do
+  test 'update fails if no settings were provided' do
     request.headers.merge! auth_header
     request.headers.merge! content_type_header
 
     json = { bla: { invalid: 'megatrue' } }.to_json
-    post :create, body: json
+    put :update, body: json
 
     parsed_response = @response.json_body
     assert_response :bad_request
     assert_equal 'no settings provided', parsed_response['errors']
   end
 
-  test 'create fails with validation error' do
+  test 'update fails with validation error' do
     request.headers.merge! auth_header
     request.headers.merge! content_type_header
 
     json = { settings: { mail_from: 'wrong-mail-address' } }.to_json
-    post :create, body: json
+    put :update, body: json
 
     parsed_response = @response.json_body
     assert_response 400

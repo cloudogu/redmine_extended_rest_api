@@ -3,13 +3,13 @@ module ExtendedApi
     class ExtendedSettingsController < ApplicationController
       before_action :require_login
       skip_before_action :verify_authenticity_token
-      accept_api_auth :create, :show
+      accept_api_auth :update, :show
 
       def show
         render :json => { settings: Setting.all }
       end
 
-      def create
+      def update
         if params[:settings].nil?
           render :status => :bad_request, :json => { errors: "no settings provided" }
         else
