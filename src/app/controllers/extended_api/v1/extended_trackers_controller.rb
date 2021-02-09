@@ -10,11 +10,11 @@ module ExtendedApi
       end
 
       def create
-        if params[:tracker].nil?
+        if params.nil? || params.empty?
           render status: :bad_request, json: { errors: ["no tracker data provided"] }
         else
           @tracker = Tracker.new
-          @tracker.safe_attributes = params[:tracker]
+          @tracker.safe_attributes = params
           if @tracker.save
             # workflow copy
             if !params[:copy_workflow_from].blank? && (copy_from = Tracker.find_by_id(params[:copy_workflow_from]))
@@ -28,11 +28,11 @@ module ExtendedApi
       end
 
       def update
-        if params[:tracker].nil? || params[:id].nil?
+        if params.nil? || params[:id].nil?
           render status: :bad_request, json: { errors: ["no tracker data provided"] }
         else
           @tracker = Tracker.find(params[:id])
-          @tracker.safe_attributes = params[:tracker]
+          @tracker.safe_attributes = params
           if @tracker.save
             render json: @tracker
           else

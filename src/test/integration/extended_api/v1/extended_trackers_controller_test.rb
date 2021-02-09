@@ -77,7 +77,7 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
     request.headers.merge! auth_header
     request.headers.merge! content_type_header
 
-    json = { tracker: { name: 'megabug', "default_status_id": 55, "description": 'my description' } }.to_json
+    json = { name: 'megabug', "default_status_id": 55, "description": 'my description' }.to_json
     post :create, body: json
 
     assert_response :created
@@ -93,7 +93,7 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
     request.headers.merge! auth_header
     request.headers.merge! content_type_header
 
-    json = { tracker: { name: 'Megabug', "description": 'my description' } }.to_json
+    json = { name: 'Megabug', "description": 'my description' } .to_json
     post :create, body: json
 
     parsed_response = @response.json_body
@@ -105,7 +105,7 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
     request.headers.merge! auth_header
     request.headers.merge! content_type_header
 
-    json = { tracker: { name: 'Bug', "default_status_id": 55, "description": 'my description' } }.to_json
+    json = { name: 'Bug', "default_status_id": 55, "description": 'my description' }.to_json
     post :create, body: json
 
     parsed_response = @response.json_body
@@ -117,7 +117,7 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
     request.headers.merge! auth_header
     request.headers.merge! content_type_header
 
-    json = { id: 4, tracker: { "description": 'my description' } }.to_json
+    json = { id: 4, "description": 'my description' }.to_json
     patch :update, body: json
 
     assert_response :success
