@@ -6,18 +6,18 @@ module ExtendedApi
       accept_api_auth :update, :show
 
       def show
-        render :json => { settings: Setting.all }
+        render json: Setting.all
       end
 
       def update
-        if params[:settings].nil?
-          render :status => :bad_request, :json => { errors: "no settings provided" }
+        if params.nil? || params.empty?
+          render status: :bad_request, json: { errors: "no settings provided" }
         else
-          errors = Setting.set_all_from_params(params[:settings].to_unsafe_hash)
+          errors = Setting.set_all_from_params(params.to_unsafe_hash)
           if errors.blank?
-            render :json => {}, :status => :no_content
+            render json: {}, status: :no_content
           else
-            render :json => { errors: errors }, :status => :bad_request
+            render json: { errors: errors }, status: :bad_request
           end
         end
       end

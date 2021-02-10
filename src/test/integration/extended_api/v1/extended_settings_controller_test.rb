@@ -30,7 +30,7 @@ class ExtendedApi::V1::ExtendedSettingsControllerTest < ActionController::TestCa
     get :show
 
     assert_response :success, @response.body
-    settings = @response.json_body['settings']
+    settings = @response.json_body
     assert_contains settings, 'app_title', 'Megamine'
   end
 
@@ -38,7 +38,7 @@ class ExtendedApi::V1::ExtendedSettingsControllerTest < ActionController::TestCa
     request.headers.merge! auth_header
     request.headers.merge! content_type_header
 
-    json = { settings: { app_title: 'Minimine' } }.to_json
+    json = { app_title: 'Minimine' }.to_json
     put :update, body: json
 
     assert_response :no_content
@@ -46,7 +46,7 @@ class ExtendedApi::V1::ExtendedSettingsControllerTest < ActionController::TestCa
     get :show
 
     assert_response :success, @response.body
-    settings = @response.json_body['settings']
+    settings = @response.json_body
     assert_contains settings, 'app_title', 'Minimine'
   end
 
@@ -61,23 +61,11 @@ class ExtendedApi::V1::ExtendedSettingsControllerTest < ActionController::TestCa
     assert_response :unauthorized
   end
 
-  test 'update fails if no settings were provided' do
-    request.headers.merge! auth_header
-    request.headers.merge! content_type_header
-
-    json = { bla: { invalid: 'megatrue' } }.to_json
-    put :update, body: json
-
-    parsed_response = @response.json_body
-    assert_response :bad_request
-    assert_equal 'no settings provided', parsed_response['errors']
-  end
-
   test 'update fails with validation error' do
     request.headers.merge! auth_header
     request.headers.merge! content_type_header
 
-    json = { settings: { mail_from: 'wrong-mail-address' } }.to_json
+    json = { mail_from: 'wrong-mail-address' }.to_json
     put :update, body: json
 
     parsed_response = @response.json_body
