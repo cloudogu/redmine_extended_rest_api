@@ -84,6 +84,11 @@ paths:
                 $ref: "#/components/schemas/Error"
         401:
           description: unauthorized access
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeleteBody"
   /v1/settings:
     get:
       summary: List all available settings
@@ -195,6 +200,11 @@ paths:
                 $ref: "#/components/schemas/Error"
         401:
           description: unauthorized access
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeleteBody"
   /v1/workflows:
     get:
       summary: List all available workflow transitions
@@ -444,6 +454,10 @@ components:
         {
           "errors": ["failed to save data", "item not found"]
         }
-
+    DeleteBody:
+      type: object
+      properties:
+        id:
+          type: string
 security:
   - basicAuth: []
