@@ -106,7 +106,7 @@ paths:
                   $ref: "#/components/examples/settingsExample"
         '401':
           description: unauthorized access
-    post:
+    put:
       summary: Add or update one or more settings
       tags:
         - settings
