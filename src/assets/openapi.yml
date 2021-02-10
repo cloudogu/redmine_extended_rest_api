@@ -338,9 +338,8 @@ components:
           additionalProperties:
             type: string
       example:
-        settings:
-          app_title: Megamine
-          rest_api_enabled: "1"
+        app_title: Megamine
+        rest_api_enabled: "1"
     Settings:
       type: array
       items:
