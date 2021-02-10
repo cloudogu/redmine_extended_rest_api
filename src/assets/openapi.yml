@@ -253,28 +253,26 @@ components:
   examples:
     settingsExample:
       value:
-        {
-          "settings": [
-            {
-              "id": 1,
-              "name": "app_title",
-              "value": "MegaMine",
-              "updated_on": "2021-01-26T17:21:45.517Z"
-            },
-            {
-              "id": 2,
-              "name": "rest_api_enabled",
-              "value": "1",
-              "updated_on": "2021-01-22T13:03:42.479Z"
-            },
-            {
-              "id": 3,
-              "name": "protocol",
-              "value": "https",
-              "updated_on": "2021-01-11T13:03:42.498Z"
-            },
-          ]
-        }
+        [
+          {
+            "id": 1,
+            "name": "app_title",
+            "value": "MegaMine",
+            "updated_on": "2021-01-26T17:21:45.517Z"
+          },
+          {
+            "id": 2,
+            "name": "rest_api_enabled",
+            "value": "1",
+            "updated_on": "2021-01-22T13:03:42.479Z"
+          },
+          {
+            "id": 3,
+            "name": "protocol",
+            "value": "https",
+            "updated_on": "2021-01-11T13:03:42.498Z"
+          },
+        ]
   securitySchemes:
     basicAuth:
       type: http
@@ -334,12 +332,9 @@ components:
           app_title: Megamine
           rest_api_enabled: "1"
     Settings:
-      type: object
-      properties:
-        settings:
-          type: array
-          items:
-            $ref: "#/components/schemas/Setting"
+      type: array
+      items:
+        $ref: "#/components/schemas/Setting"
     Setting:
       type: object
       properties:
