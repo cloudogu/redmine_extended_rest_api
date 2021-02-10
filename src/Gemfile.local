@@ -1,0 +1,12 @@
+group :local do
+  source 'https://rubygems.org'
+end
+
+group :test do
+  gem 'minitest-reporters'
+end
+
+group :local do
+  gem 'minitest'
+  gem 'rails'
+end

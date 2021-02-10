@@ -1,0 +1,462 @@
+openapi: "3.0.0"
+info:
+  title: Redmine extended API overview
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/extended_api
+    description: local development instance
+  - url: https://192.168.56.2/redmine/extended_api
+    description: local development instance inside a CES
+paths:
+  /v1/issue_statuses:
+    get:
+      summary: Lists all available issue statuses
+      tags:
+        - issue statuses
+      responses:
+        200:
+          description: all available issue statuses will be returned
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IssueStatuses"
+        401:
+          description: unauthorized access
+    post:
+      summary: Adds a new issue status
+      tags:
+        - issue statuses
+      responses:
+        201:
+          description: issue status was created successfully
+        401:
+          description: unauthorized access
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IssueStatus"
+            example:
+                {
+                  "name": "One-X",
+                  "is_closed": true
+                }
+    patch:
+      summary: Updates an existing issue status
+      tags:
+        - issue statuses
+      responses:
+        200:
+          description: returns the updated issue status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IssueStatus"
+              example:
+                {
+                  "id": 1,
+                  "name": "Two-X",
+                  "is_closed": false
+                }
+        401:
+          description: unauthorized access
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IssueStatus"
+    delete:
+      summary: Deletes an issue status
+      tags:
+        - issue statuses
+      responses:
+        200:
+          description: returns the deleted issue status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IssueStatus"
+        400:
+          description: the issue status could not be deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: unauthorized access
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeleteBody"
+  /v1/settings:
+    get:
+      summary: List all available settings
+      tags:
+        - settings
+      responses:
+        '200':
+          description: all available settings will be returned
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Settings"
+              examples:
+                simple:
+                  $ref: "#/components/examples/settingsExample"
+        '401':
+          description: unauthorized access
+    put:
+      summary: Add or update one or more settings
+      tags:
+        - settings
+      responses:
+        204:
+          description: the sent data is valid and was saved successfully
+        400:
+          description: the sent data contains invalid values and cannot be processed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: unauthorized access
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SettingsParam"
+  /v1/trackers:
+    get:
+      summary: List all available trackers
+      tags:
+        - trackers
+      responses:
+        200:
+          description: all available trackers will be returned
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Trackers"
+        401:
+          description: unauthorized access
+    post:
+      summary: Adds a new tracker
+      tags:
+        - trackers
+      responses:
+        201:
+          description: issue status was created successfully
+        401:
+          description: unauthorized access
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Tracker"
+            example:
+              {
+                "name": "new feature tracker"
+              }
+    patch:
+      summary: Updates an existing tracker
+      tags:
+        - trackers
+      responses:
+        200:
+          description: returns the updated tracker
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tracker"
+        401:
+          description: unauthorized access
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Tracker"
+            example:
+              {
+                "id": 1,
+                 "name": "tracker to update"
+              }
+    delete:
+      summary: Deletes a tracker
+      tags:
+        - trackers
+      responses:
+        200:
+          description: returns the deleted tracker
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tracker"
+        400:
+          description: the tracker could not be deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: unauthorized access
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeleteBody"
+  /v1/workflows:
+    get:
+      summary: List all available workflow transitions
+      tags:
+        - workflows
+      responses:
+        '200':
+          description: all available workflow transitions will be returned
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkflowTransitions"
+        '401':
+          description: unauthorized access
+    patch:
+      summary: Updates the given status transitions
+      tags:
+        - workflows
+      responses:
+        '204':
+          description: update was successful
+        '401':
+          description: unauthorized access
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Transitions"
+            examples:
+              single:
+                value:
+                  {
+                    "role_id": [ "1" ],
+                    "tracker_id": [ "1" ],
+                    "transitions": {
+                      "123": {
+                        "1": { "always": "1" }
+                      }
+                    }
+                  }
+              multiple:
+                value:
+                  {
+                    "role_id": [ "4" ],
+                    "tracker_id": [ "23", "24" ],
+                    "transitions": {
+                      "12": {
+                        "1": { "always": "1", "author": "1", "assignee": "0" }
+                      },
+                      "123": {
+                        "12": { "always": "1", "author": "0", "assignee": "1" }
+                      }
+                    }
+                  }
+components:
+  examples:
+    settingsExample:
+      value:
+        [
+          {
+            "id": 1,
+            "name": "app_title",
+            "value": "MegaMine",
+            "updated_on": "2021-01-26T17:21:45.517Z"
+          },
+          {
+            "id": 2,
+            "name": "rest_api_enabled",
+            "value": "1",
+            "updated_on": "2021-01-22T13:03:42.479Z"
+          },
+          {
+            "id": 3,
+            "name": "protocol",
+            "value": "https",
+            "updated_on": "2021-01-11T13:03:42.498Z"
+          },
+        ]
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    Trackers:
+      type: array
+      items:
+        $ref: "#/components/schemas/Tracker"
+    Tracker:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        position:
+          type: integer
+        is_in_roadmap:
+          type: boolean
+        default_status_id:
+          type: integer
+        description:
+          type: string
+        is_in_chlog:
+          type: boolean
+        fields_bits:
+          type: integer
+    IssueStatuses:
+      type: array
+      items:
+        $ref: "#/components/schemas/IssueStatus"
+    IssueStatus:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        is_closed:
+          type: boolean
+        position:
+          type: integer
+        default_done_ratio:
+          type: object
+    SettingsParam:
+      type: object
+      properties:
+        settings:
+          description: all settings can be passed as simple key value pair inside the settings object
+          minProperties: 1
+          type: object
+          additionalProperties:
+            type: string
+      example:
+        app_title: Megamine
+        rest_api_enabled: "1"
+    Settings:
+      type: array
+      items:
+        $ref: "#/components/schemas/Setting"
+    Setting:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        value:
+          type: string
+        updated_on:
+          type: string
+    WorkflowTransitions:
+      type: array
+      items:
+        $ref: "#/components/schemas/WorkflowTransition"
+      example:
+        [
+          {
+            "id": 11,
+            "tracker_id": 1,
+            "old_status_id": 3,
+            "new_status_id": 1,
+            "role_id": 1,
+            "assignee": false,
+            "author": false,
+            "field_name": null,
+            "rule": null
+          },
+          {
+            "id": 12,
+            "tracker_id": 1,
+            "old_status_id": 3,
+            "new_status_id": 2,
+            "role_id": 1,
+            "assignee": false,
+            "author": false,
+            "field_name": null,
+            "rule": null
+          }
+        ]
+    WorkflowTransition:
+      type: object
+      properties:
+        id:
+          type: integer
+        tracker_id:
+          type: integer
+        old_status_id:
+          type: integer
+        role_id:
+          type: integer
+        assignee:
+          type: string
+        author:
+          type: string
+        field_name:
+          type: string
+        rule:
+          type: string
+      example:
+        id: 11,
+        tracker_id: 1
+        old_status_id: 3
+        new_status_id: 1
+        role_id: 1
+        assignee: false
+        author: false
+        field_name: null
+        rule: null
+    Transitions:
+      type: object
+      properties:
+        role_id:
+          type: array
+          items:
+            type: integer
+        tracker_id:
+          type: array
+          items:
+            type: integer
+        transitions:
+          type: object
+          additionalProperties:
+            type: object
+            additionalProperties:
+              $ref: "#/components/schemas/Transition"
+    Transition:
+      type: object
+      properties:
+        always:
+          type: string
+          enum: [ "0", "1" ]
+        author:
+          type: string
+          enum: [ "0", "1" ]
+        assignee:
+          type: string
+          enum: [ "0", "1" ]
+    Error:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
+      example:
+        {
+          "errors": ["failed to save data", "item not found"]
+        }
+    DeleteBody:
+      type: object
+      properties:
+        id:
+          type: string
+security:
+  - basicAuth: []
