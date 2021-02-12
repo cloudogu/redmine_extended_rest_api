@@ -10,7 +10,6 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
     :projects,
   )
 
-  accept_header = { 'Accept' => 'application/json' }
   content_type_header = { 'Content-Type' => 'application/json' }
   auth_header_wrong = { :Authorization => 'Basic YWRtaW46YWRtaW1=' }
   auth_header = { :Authorization => 'Basic YWRtaW46YWRtaW4=' }
@@ -25,7 +24,6 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
   test 'show responds with 401 on unauthorized access' do
     request.headers.merge! auth_header_wrong
     request.headers.merge! content_type_header
-    request.headers.merge! accept_header
 
     get :show
 
@@ -35,7 +33,6 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
   test 'create responds with 401 on unauthorized access' do
     request.headers.merge! auth_header_wrong
     request.headers.merge! content_type_header
-    request.headers.merge! accept_header
 
     post :create
 
@@ -45,7 +42,6 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
   test 'update responds with 401 on unauthorized access' do
     request.headers.merge! auth_header_wrong
     request.headers.merge! content_type_header
-    request.headers.merge! accept_header
 
     patch :update
 
@@ -55,7 +51,6 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
   test 'destroy responds with 401 on unauthorized access' do
     request.headers.merge! auth_header_wrong
     request.headers.merge! content_type_header
-    request.headers.merge! accept_header
 
     delete :destroy
 

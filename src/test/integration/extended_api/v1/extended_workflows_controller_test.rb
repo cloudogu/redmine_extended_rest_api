@@ -9,7 +9,6 @@ class ExtendedApi::V1::ExtendedWorkflowsControllerTest < ActionController::TestC
     :issue_statuses
   )
 
-  accept_header = { 'Accept' => 'application/json' }
   content_type_header = { 'Content-Type' => 'application/json' }
   auth_header_wrong = { :Authorization => 'Basic YWRtaW46YWRtaW1=' }
   auth_header = { :Authorization => 'Basic YWRtaW46YWRtaW4=' }
@@ -22,7 +21,6 @@ class ExtendedApi::V1::ExtendedWorkflowsControllerTest < ActionController::TestC
   test 'show responds with 401 on unauthorized access' do
     request.headers.merge! auth_header_wrong
     request.headers.merge! content_type_header
-    request.headers.merge! accept_header
 
     get :show
 
@@ -32,7 +30,6 @@ class ExtendedApi::V1::ExtendedWorkflowsControllerTest < ActionController::TestC
   test 'patch responds with 401 on unauthorized access' do
     request.headers.merge! auth_header_wrong
     request.headers.merge! content_type_header
-    request.headers.merge! accept_header
 
     patch :update
 
