@@ -11,7 +11,7 @@ module ExtendedApi
 
       def update
         if params.nil? || params.empty?
-          render status: :bad_request, json: { errors: "no settings provided" }
+          render status: :bad_request, json: { errors: 'no settings provided' }
         else
           errors = Setting.set_all_from_params(params.to_unsafe_hash)
           if errors.blank?

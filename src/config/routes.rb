@@ -21,6 +21,7 @@ namespace :extended_api do
     get 'workflows', action: :show, controller: 'extended_workflows'
     patch 'workflows', action: :update, controller: 'extended_workflows'
 
+    get 'custom_fields', action: :show, controller: 'extended_custom_fields'
     post 'custom_fields', action: :create, controller: 'extended_custom_fields'
     patch 'custom_fields', action: :update, controller: 'extended_custom_fields'
     delete 'custom_fields', action: :destroy, controller: 'extended_custom_fields'
