@@ -9,13 +9,17 @@ module ExtendedApi
         render json: CustomField.all
       end
 
+      def types
+        render json: list_possible_types
+      end
+
       def create
         if params[:type].nil? || params[:type].empty?
           render json: { "errors": ['no field type provided'] }
         else
           @custom_field = CustomField.new_subclass_instance(params[:type])
           unless @custom_field
-            render json: { "errors": ["could not create field with type '#{params[:type]}'"] }, status: :bad_request
+            render json: { "errors": ["could not create field of type '#{params[:type]}'. possible values are '#{list_possible_types}'"] }, status: :bad_request
             return
           end
           begin
@@ -68,6 +72,12 @@ module ExtendedApi
             render json: { "errors": [l(:error_can_not_delete_custom_field)] }, status: :bad_request
           end
         end
+      end
+
+      private
+
+      def list_possible_types
+        CustomFieldsHelper::CUSTOM_FIELDS_TABS.map { |h| h[:name] }
       end
     end
   end
