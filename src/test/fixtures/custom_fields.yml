@@ -11,3 +11,15 @@ custom_fields_001:
   default_value: ""
   editable: true
   position: 2
+custom_fields_002:
+  name: DeleteMe
+  id: 2
+  regexp: ""
+  is_for_all: true
+  is_filter: true
+  type: IssueCustomField
+  is_required: false
+  field_format: list
+  default_value: ""
+  editable: true
+  position: 3

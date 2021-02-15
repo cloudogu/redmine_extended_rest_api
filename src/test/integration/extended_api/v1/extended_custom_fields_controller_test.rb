@@ -81,4 +81,29 @@ class ExtendedApi::V1::ExtendedCustomFieldsControllerTest < ActionController::Te
     errors = @response.json_body['errors']
     assert_equal ['ist bereits vergeben'], errors[0]['name']
   end
+
+  test 'update updates an existing custom field' do
+    skip("tbd")
+  end
+
+  test 'update fails when trying to update a not existing custom field' do
+    skip("tbd")
+  end
+
+  test 'destroy deletes an existing custom field' do
+    request.headers.merge! auth_header
+    request.headers.merge! content_type_header
+
+    custom_field_id = 2
+    json = { "id": custom_field_id }.to_json
+    delete :destroy, body: json
+
+    assert_response :success
+    deleted_field = @response.json_body
+
+    assert_contains_entry [deleted_field],
+                          'name' => 'DeleteMe',
+                          'field_format' => 'list',
+                          'id' => custom_field_id
+  end
 end
