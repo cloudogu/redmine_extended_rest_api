@@ -41,7 +41,7 @@ paths:
       responses:
         200:
           description: the deleted custom field
-  /v1/custom_fields/types:
+  /v1/custom_fields/fieldtypes:
     get:
       summary: Lists all available field types
       tags:
@@ -49,7 +49,11 @@ paths:
       responses:
         200:
           description: all available field types
-  /v1/custom_fields/formats:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StringArray"
+  /v1/custom_fields/fieldformats:
     get:
       summary: Lists all available field value formats
       tags:
@@ -57,6 +61,10 @@ paths:
       responses:
         200:
           description: all available field value formats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StringArray"
   /v1/issue_statuses:
     get:
       summary: Lists all available issue statuses
@@ -381,6 +389,10 @@ components:
           type: object
         description:
           type: string
+    StringArray:
+      type: array
+      items:
+        type: string
     Trackers:
       type: array
       items:

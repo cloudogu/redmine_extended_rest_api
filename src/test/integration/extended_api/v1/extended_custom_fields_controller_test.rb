@@ -162,15 +162,27 @@ class ExtendedApi::V1::ExtendedCustomFieldsControllerTest < ActionController::Te
     assert_equal [expected_error_message], errors
   end
 
-  test 'types lists the available field types' do
+  test 'fieldtypes lists the available field types' do
     request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
     request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
-    get :types
+    get :fieldtypes
 
     assert_response :success
     types_list = @response.json_body
     assert_includes types_list, 'IssueCustomField'
     assert_includes types_list, 'TimeEntryActivityCustomField'
+  end
+
+  test 'fieldformats lists the available field value formats' do
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
+
+    get :fieldformats
+
+    assert_response :success
+    format_list = @response.json_body
+    assert_includes format_list, 'list'
+    assert_includes format_list, 'text'
   end
 end
