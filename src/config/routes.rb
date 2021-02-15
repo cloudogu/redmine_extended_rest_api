@@ -6,6 +6,7 @@ namespace :extended_api do
 
     get 'custom_fields', action: :show, controller: 'extended_custom_fields'
     get 'custom_fields/types', action: :types, controller: 'extended_custom_fields'
+    get 'custom_fields/formats', action: :types, controller: 'extended_custom_fields'
     post 'custom_fields', action: :create, controller: 'extended_custom_fields'
     patch 'custom_fields', action: :update, controller: 'extended_custom_fields'
     delete 'custom_fields', action: :destroy, controller: 'extended_custom_fields'
