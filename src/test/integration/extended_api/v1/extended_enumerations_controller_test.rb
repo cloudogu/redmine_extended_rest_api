@@ -58,4 +58,39 @@ class ExtendedApi::V1::ExtendedEnumerationsControllerTest < ActionController::Te
     assert_response :unauthorized
   end
 
+  test 'show without type restriction lists two entries' do
+    skip('tbd')
+  end
+
+  test 'show with type restriction lists one entries' do
+    skip('tbd')
+  end
+
+  test 'show with wrong type restriction lists no entry' do
+    skip('tbd')
+  end
+
+  test 'create inserts a new entry for type TimeEntryActivity' do
+    skip('tbd')
+  end
+
+  test 'create fails inserting a new entry with wrong type' do
+    skip('tbd')
+  end
+
+  test 'update updates the name of an existing entry' do
+    skip('tbd')
+  end
+
+  test 'update fails updating a not existing entry' do
+    skip('tbd')
+  end
+
+  test 'destroy deletes an existing entry' do
+    skip('tbd')
+  end
+
+  test 'destroy fails to delete a not existing entry' do
+    skip('tbd')
+  end
 end
