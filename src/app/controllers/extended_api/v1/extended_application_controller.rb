@@ -17,6 +17,15 @@ module ExtendedApi
         end
         true
       end
+
+      def render_error(arg)
+        arg = {:message => arg} unless arg.is_a?(Hash)
+
+        @message = arg[:message]
+        @message = l(@message) if @message.is_a?(Symbol)
+        @status = arg[:status] || 500
+        render status: @status, json: { "errors": [ @message ] }
+      end
     end
   end
 end
