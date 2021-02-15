@@ -8,6 +8,55 @@ servers:
   - url: https://192.168.56.2/redmine/extended_api
     description: local development instance inside a CES
 paths:
+  /v1/custom_fields:
+    get:
+      summary: Lists all available custom fields
+      tags:
+        - custom fields
+      responses:
+        200:
+          description: list of custom fields
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomFields"
+    patch:
+      summary: Updates an existing custom field
+      tags:
+        - custom fields
+      responses:
+        200:
+          description: the updated custom field
+    post:
+      summary: Creates a new custom field
+      tags:
+        - custom fields
+      responses:
+        201:
+          description: the created custom field
+    delete:
+      summary: Deletes an existing custom field
+      tags:
+        - custom fields
+      responses:
+        200:
+          description: the deleted custom field
+  /v1/custom_fields/types:
+    get:
+      summary: Lists all available field types
+      tags:
+        - custom fields
+      responses:
+        200:
+          description: all available field types
+  /v1/custom_fields/formats:
+    get:
+      summary: Lists all available field value formats
+      tags:
+        - custom fields
+      responses:
+        200:
+          description: all available field value formats
   /v1/issue_statuses:
     get:
       summary: Lists all available issue statuses
@@ -288,6 +337,50 @@ components:
       type: http
       scheme: basic
   schemas:
+    CustomFields:
+      type: array
+      items:
+        $ref: "#/components/schemas/CustomField"
+    CustomField:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        field_format:
+          type: string
+          enum: ['string', 'text', 'link', 'int', 'float', 'date', 'list', 'bool', 'enumeration', 'user', 'version', 'attachment']
+        possible_values:
+          type: array
+          items:
+            type: string
+        regexp:
+          type: string
+        min_length:
+          type: integer
+        max_length:
+          type: integer
+        is_required:
+          type: boolean
+        is_for_all:
+          type: boolean
+        is_filter:
+          type: boolean
+        searchable:
+          type: boolean
+        default_value:
+          type: string
+        editable:
+          type: boolean
+        visible:
+          type: boolean
+        multiple:
+          type: boolean
+        format_store:
+          type: object
+        description:
+          type: string
     Trackers:
       type: array
       items:
