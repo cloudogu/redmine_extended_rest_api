@@ -22,6 +22,15 @@ class ExtendedApi::V1::ExtendedCustomFieldsControllerTest < ActionController::Te
     assert_routing({ method: :delete, path: 'extended_api/v1/custom_fields' }, controller: 'extended_api/v1/extended_custom_fields', action: 'destroy')
   end
 
+  test 'show responds with 401 on unauthorized access' do
+    request.headers.merge! auth_header_wrong
+    request.headers.merge! content_type_header
+
+    get :show
+
+    assert_response :unauthorized
+  end
+
   test 'create responds with 401 on unauthorized access' do
     request.headers.merge! auth_header_wrong
     request.headers.merge! content_type_header

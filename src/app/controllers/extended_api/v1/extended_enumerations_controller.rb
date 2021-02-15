@@ -3,8 +3,8 @@ module ExtendedApi
     class ExtendedEnumerationsController < ExtendedApplicationController
       before_action :require_login
       skip_before_action :verify_authenticity_token
-      accept_api_auth :show, :destroy
-      before_action :find_enumeration, :only => [:edit, :update, :destroy]
+      accept_api_auth :show, :create, :update, :destroy
+      before_action :find_enumeration, :only => [:update, :destroy]
 
       def show
         @klass = Enumeration.get_subclass(params[:type])
@@ -13,6 +13,14 @@ module ExtendedApi
         else
           render json: Enumeration.shared.sorted
         end
+      end
+
+      def create
+        render json: {}
+      end
+
+      def update
+        render json: {}
       end
 
       def destroy

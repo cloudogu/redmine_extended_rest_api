@@ -11,6 +11,9 @@ namespace :extended_api do
     delete 'custom_fields', action: :destroy, controller: 'extended_custom_fields'
 
     get 'enumerations', action: :show, controller: 'extended_enumerations'
+    post 'enumerations', action: :create, controller: 'extended_enumerations'
+    patch 'enumerations', action: :update, controller: 'extended_enumerations'
+    delete 'enumerations', action: :destroy, controller: 'extended_enumerations'
 
     get 'issue_statuses', action: :show, controller: 'extended_issue_statuses'
     post 'issue_statuses', action: :create, controller: 'extended_issue_statuses'
