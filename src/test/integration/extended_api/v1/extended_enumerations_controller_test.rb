@@ -11,10 +11,6 @@ class ExtendedApi::V1::ExtendedEnumerationsControllerTest < ActionController::Te
     :custom_fields
   )
 
-  content_type_header = { 'Content-Type' => 'application/json' }
-  auth_header_wrong = { :Authorization => 'Basic YWRtaW46YWRtaW1=' }
-  auth_header = { :Authorization => 'Basic YWRtaW46YWRtaW4=' }
-
   test 'check for correct route generation' do
     assert_routing({ method: :get, path: 'extended_api/v1/enumerations' }, controller: 'extended_api/v1/extended_enumerations', action: 'show')
     assert_routing({ method: :post, path: 'extended_api/v1/enumerations' }, controller: 'extended_api/v1/extended_enumerations', action: 'create')
@@ -23,8 +19,8 @@ class ExtendedApi::V1::ExtendedEnumerationsControllerTest < ActionController::Te
   end
 
   test 'show responds with 401 on unauthorized access' do
-    request.headers.merge! auth_header_wrong
-    request.headers.merge! content_type_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_WRONG
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     get :show
 
@@ -32,8 +28,8 @@ class ExtendedApi::V1::ExtendedEnumerationsControllerTest < ActionController::Te
   end
 
   test 'create responds with 401 on unauthorized access' do
-    request.headers.merge! auth_header_wrong
-    request.headers.merge! content_type_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_WRONG
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     post :create
 
@@ -41,8 +37,8 @@ class ExtendedApi::V1::ExtendedEnumerationsControllerTest < ActionController::Te
   end
 
   test 'update responds with 401 on unauthorized access' do
-    request.headers.merge! auth_header_wrong
-    request.headers.merge! content_type_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_WRONG
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     patch :update
 
@@ -50,8 +46,8 @@ class ExtendedApi::V1::ExtendedEnumerationsControllerTest < ActionController::Te
   end
 
   test 'destroy responds with 401 on unauthorized access' do
-    request.headers.merge! auth_header_wrong
-    request.headers.merge! content_type_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_WRONG
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     delete :destroy
 
@@ -59,38 +55,53 @@ class ExtendedApi::V1::ExtendedEnumerationsControllerTest < ActionController::Te
   end
 
   test 'show without type restriction lists two entries' do
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
     skip('tbd')
   end
 
   test 'show with type restriction lists one entries' do
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
     skip('tbd')
   end
 
   test 'show with wrong type restriction lists no entry' do
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
     skip('tbd')
   end
 
   test 'create inserts a new entry for type TimeEntryActivity' do
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
     skip('tbd')
   end
 
   test 'create fails inserting a new entry with wrong type' do
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
     skip('tbd')
   end
 
   test 'update updates the name of an existing entry' do
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
     skip('tbd')
   end
 
   test 'update fails updating a not existing entry' do
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
     skip('tbd')
   end
 
   test 'destroy deletes an existing entry' do
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
     skip('tbd')
   end
 
   test 'destroy fails to delete a not existing entry' do
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
     skip('tbd')
   end
 end

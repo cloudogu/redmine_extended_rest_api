@@ -9,18 +9,14 @@ class ExtendedApi::V1::ExtendedWorkflowsControllerTest < ActionController::TestC
     :issue_statuses
   )
 
-  content_type_header = { 'Content-Type' => 'application/json' }
-  auth_header_wrong = { :Authorization => 'Basic YWRtaW46YWRtaW1=' }
-  auth_header = { :Authorization => 'Basic YWRtaW46YWRtaW4=' }
-
   test 'check for correct route generation' do
     assert_routing({ method: :get, path: 'extended_api/v1/workflows' }, controller: 'extended_api/v1/extended_workflows', action: 'show')
     assert_routing({ method: :patch, path: 'extended_api/v1/workflows' }, controller: 'extended_api/v1/extended_workflows', action: 'update')
   end
 
   test 'show responds with 401 on unauthorized access' do
-    request.headers.merge! auth_header_wrong
-    request.headers.merge! content_type_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_WRONG
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     get :show
 
@@ -28,8 +24,8 @@ class ExtendedApi::V1::ExtendedWorkflowsControllerTest < ActionController::TestC
   end
 
   test 'patch responds with 401 on unauthorized access' do
-    request.headers.merge! auth_header_wrong
-    request.headers.merge! content_type_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_WRONG
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     patch :update
 
@@ -37,8 +33,8 @@ class ExtendedApi::V1::ExtendedWorkflowsControllerTest < ActionController::TestC
   end
 
   test 'show lists all available workflow transitions' do
-    request.headers.merge! auth_header
-    request.headers.merge! content_type_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     get :show
 
@@ -46,8 +42,8 @@ class ExtendedApi::V1::ExtendedWorkflowsControllerTest < ActionController::TestC
   end
 
   test 'update updates two transitions for status 122' do
-    request.headers.merge! auth_header
-    request.headers.merge! content_type_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     json = {
       role_id: [

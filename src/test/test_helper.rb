@@ -3,6 +3,12 @@ require 'minitest/reporters'
 require 'json'
 require File.expand_path(File.dirname(__FILE__) + '/../../../test/test_helper')
 
+module TestHeaders
+  AUTH_HEADER_ADMIN = { :Authorization => 'Basic YWRtaW46YWRtaW4=' }
+  AUTH_HEADER_WRONG = { :Authorization => 'Basic YWRtaW46YWRtaW1=' }
+  CONTENT_TYPE_JSON_HEADER = { 'Content-Type' => 'application/json' }
+end
+
 Minitest::Reporters.use! [Minitest::Reporters::JUnitReporter.new, Minitest::Reporters::DefaultReporter.new]
 
 ActiveRecord::Base.logger = ActiveSupport::Logger.new(STDOUT)
@@ -19,7 +25,7 @@ class ActionDispatch::TestResponse
 end
 
 module MiniTest::Assertions
-  def assert_contains settings, key, value
+  def assert_settings_contains settings, key, value
     contains_kv_pair, message = contains_setting_with_value(settings, key, value)
     assert contains_kv_pair, message
   end

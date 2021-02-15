@@ -10,10 +10,6 @@ class ExtendedApi::V1::ExtendedIssueStatusesControllerTest < ActionController::T
     :projects,
   )
 
-  content_type_header = { 'Content-Type' => 'application/json' }
-  auth_header_wrong = { :Authorization => 'Basic YWRtaW46YWRtaW1=' }
-  auth_header = { :Authorization => 'Basic YWRtaW46YWRtaW4=' }
-
   test 'check for correct route generation' do
     assert_routing({ method: :get, path: 'extended_api/v1/issue_statuses' }, controller: 'extended_api/v1/extended_issue_statuses', action: 'show')
     assert_routing({ method: :post, path: 'extended_api/v1/issue_statuses' }, controller: 'extended_api/v1/extended_issue_statuses', action: 'create')
@@ -22,16 +18,43 @@ class ExtendedApi::V1::ExtendedIssueStatusesControllerTest < ActionController::T
   end
 
   test 'show responds with 401 on unauthorized access' do
-    request.headers.merge! auth_header_wrong
-    request.headers.merge! content_type_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_WRONG
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     get :show
 
     assert_response :unauthorized
   end
 
+  test 'create responds with 401 on unauthorized access' do
+    request.headers.merge! TestHeaders::AUTH_HEADER_WRONG
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
+
+    post :create
+
+    assert_response :unauthorized
+  end
+
+  test 'update responds with 401 on unauthorized access' do
+    request.headers.merge! TestHeaders::AUTH_HEADER_WRONG
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
+
+    patch :update
+
+    assert_response :unauthorized
+  end
+
+  test 'destroy responds with 401 on unauthorized access' do
+    request.headers.merge! TestHeaders::AUTH_HEADER_WRONG
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
+
+    delete :destroy
+
+    assert_response :unauthorized
+  end
+
   test 'show responds with a list of issue statuses' do
-    request.headers.merge! auth_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
 
     get :show
 
@@ -41,8 +64,8 @@ class ExtendedApi::V1::ExtendedIssueStatusesControllerTest < ActionController::T
   end
 
   test 'create inserts a new issue status' do
-    request.headers.merge! auth_header
-    request.headers.merge! content_type_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     json = { name: 'test-status-001', "is_closed": '1' }.to_json
     post :create, body: json
@@ -57,8 +80,8 @@ class ExtendedApi::V1::ExtendedIssueStatusesControllerTest < ActionController::T
   end
 
   test 'create fails if name is missing' do
-    request.headers.merge! auth_header
-    request.headers.merge! content_type_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     json = { issue_status: { "is_closed": '1' } }.to_json
     post :create, body: json
@@ -69,8 +92,8 @@ class ExtendedApi::V1::ExtendedIssueStatusesControllerTest < ActionController::T
   end
 
   test 'create fails if issue status already exists' do
-    request.headers.merge! auth_header
-    request.headers.merge! content_type_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     json = { name: 'Duplicate' }.to_json
     post :create, body: json
@@ -81,8 +104,8 @@ class ExtendedApi::V1::ExtendedIssueStatusesControllerTest < ActionController::T
   end
 
   test 'update updates the is_closed flag' do
-    request.headers.merge! auth_header
-    request.headers.merge! content_type_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     status_id = 88
 
@@ -102,8 +125,8 @@ class ExtendedApi::V1::ExtendedIssueStatusesControllerTest < ActionController::T
   end
 
   test 'destroy deletes a specific issue status' do
-    request.headers.merge! auth_header
-    request.headers.merge! content_type_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     json = { id: 99 }.to_json
     delete :destroy, body: json
@@ -120,8 +143,8 @@ class ExtendedApi::V1::ExtendedIssueStatusesControllerTest < ActionController::T
   end
 
   test 'destroy fails deleting an issue status with related tracker' do
-    request.headers.merge! auth_header
-    request.headers.merge! content_type_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     json = { id: 111 }.to_json
     delete :destroy, body: json

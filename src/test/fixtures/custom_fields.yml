@@ -10,7 +10,7 @@ custom_fields_001:
   field_format: int
   default_value: ""
   editable: true
-  position: 2
+  position: 1
 custom_fields_002:
   name: DeleteMe
   id: 2
@@ -22,4 +22,28 @@ custom_fields_002:
   field_format: list
   default_value: ""
   editable: true
+  position: 2
+custom_fields_003:
+  name: my-int-field
+  id: 3
+  regexp: ""
+  is_for_all: true
+  is_filter: true
+  type: IssueCustomField
+  is_required: false
+  field_format: int
+  default_value: ""
+  editable: true
   position: 3
+custom_fields_004:
+  name: UpdateME
+  id: 4
+  regexp: ""
+  is_for_all: true
+  is_filter: true
+  type: IssueCustomField
+  is_required: false
+  field_format: int
+  default_value: ""
+  editable: true
+  position: 4

@@ -3,7 +3,9 @@ module ExtendedApi
     class ExtendedCustomFieldsController < ExtendedApplicationController
       before_action :require_login
       skip_before_action :verify_authenticity_token
-      accept_api_auth :show, :create, :update, :destroy
+      accept_api_auth :show, :create, :update, :destroy, :types
+
+      before_action :find_custom_field, :only => [:update, :destroy]
 
       def show
         render json: CustomField.all
@@ -39,12 +41,6 @@ module ExtendedApi
         if params[:id].nil?
           render json: { "errors": ['no id provided'] }, status: :bad_request
         else
-          begin
-            @custom_field = CustomField.find(params[:id])
-          rescue ActiveRecord::RecordNotFound => e
-            render status: :not_found, json: e.message
-            return
-          end
           @custom_field.safe_attributes = params
           if @custom_field.save
             render json: @custom_field
@@ -59,12 +55,6 @@ module ExtendedApi
           render json: { "errors": ['no id provided'] }, status: :bad_request
         else
           begin
-            @custom_field = CustomField.find(params[:id])
-          rescue ActiveRecord::RecordNotFound => e
-            render status: :not_found, json: { "errors": [e.message] }
-            return
-          end
-          begin
             if @custom_field.destroy
               render json: @custom_field
             end
@@ -75,6 +65,12 @@ module ExtendedApi
       end
 
       private
+
+      def find_custom_field
+        @custom_field = CustomField.find(params[:id])
+      rescue ActiveRecord::RecordNotFound
+        render_404 message: "custom field with id '#{params[:id]}' could not be found"
+      end
 
       def list_possible_types
         CustomFieldsHelper::CUSTOM_FIELDS_TABS.map { |h| h[:name] }

@@ -10,10 +10,6 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
     :projects,
   )
 
-  content_type_header = { 'Content-Type' => 'application/json' }
-  auth_header_wrong = { :Authorization => 'Basic YWRtaW46YWRtaW1=' }
-  auth_header = { :Authorization => 'Basic YWRtaW46YWRtaW4=' }
-
   test 'check for correct route generation' do
     assert_routing({ method: :get, path: 'extended_api/v1/trackers' }, controller: 'extended_api/v1/extended_trackers', action: 'show')
     assert_routing({ method: :post, path: 'extended_api/v1/trackers' }, controller: 'extended_api/v1/extended_trackers', action: 'create')
@@ -22,8 +18,8 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
   end
 
   test 'show responds with 401 on unauthorized access' do
-    request.headers.merge! auth_header_wrong
-    request.headers.merge! content_type_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_WRONG
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     get :show
 
@@ -31,8 +27,8 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
   end
 
   test 'create responds with 401 on unauthorized access' do
-    request.headers.merge! auth_header_wrong
-    request.headers.merge! content_type_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_WRONG
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     post :create
 
@@ -40,8 +36,8 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
   end
 
   test 'update responds with 401 on unauthorized access' do
-    request.headers.merge! auth_header_wrong
-    request.headers.merge! content_type_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_WRONG
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     patch :update
 
@@ -49,8 +45,8 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
   end
 
   test 'destroy responds with 401 on unauthorized access' do
-    request.headers.merge! auth_header_wrong
-    request.headers.merge! content_type_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_WRONG
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     delete :destroy
 
@@ -58,7 +54,7 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
   end
 
   test 'show responds with a list of trackers' do
-    request.headers.merge! auth_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
 
     get :show
 
@@ -69,8 +65,8 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
   end
 
   test 'create inserts a new tracker' do
-    request.headers.merge! auth_header
-    request.headers.merge! content_type_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     json = { name: 'megabug', "default_status_id": 55, "description": 'my description' }.to_json
     post :create, body: json
@@ -85,8 +81,8 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
   end
 
   test 'create fails if default status is missing' do
-    request.headers.merge! auth_header
-    request.headers.merge! content_type_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     json = { name: 'Megabug', "description": 'my description' } .to_json
     post :create, body: json
@@ -97,8 +93,8 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
   end
 
   test 'create fails if tracker already exists' do
-    request.headers.merge! auth_header
-    request.headers.merge! content_type_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     json = { name: 'Bug', "default_status_id": 55, "description": 'my description' }.to_json
     post :create, body: json
@@ -109,8 +105,8 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
   end
 
   test 'update updates the description' do
-    request.headers.merge! auth_header
-    request.headers.merge! content_type_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     json = { id: 4, "description": 'my description' }.to_json
     patch :update, body: json
@@ -126,8 +122,8 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
   end
 
   test 'destroy deletes a specific tracker' do
-    request.headers.merge! auth_header
-    request.headers.merge! content_type_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     json = { id: 5 }.to_json
     delete :destroy, body: json
@@ -144,8 +140,8 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
   end
 
   test 'destroy fails deleting a tracker with related issue' do
-    request.headers.merge! auth_header
-    request.headers.merge! content_type_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     json = { id: 6 }.to_json
     delete :destroy, body: json
