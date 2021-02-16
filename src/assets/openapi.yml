@@ -20,6 +20,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CustomFields"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
     patch:
       summary: Updates an existing custom field
       tags:
@@ -27,6 +33,21 @@ paths:
       responses:
         200:
           description: the updated custom field
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomFieldsModel"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CustomFieldsPatch"
     post:
       summary: Creates a new custom field
       tags:
@@ -34,6 +55,29 @@ paths:
       responses:
         201:
           description: the created custom field
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomFieldsModel"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CustomFieldsPost"
+            examples:
+              minimal:
+                $ref: "#/components/examples/customFieldsMinimal"
+              list:
+                $ref: "#/components/examples/customFieldsList"
+              full:
+                $ref: "#/components/examples/customFieldsFull"
+        required: true
     delete:
       summary: Deletes an existing custom field
       tags:
@@ -41,6 +85,26 @@ paths:
       responses:
         200:
           description: the deleted custom field
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomFieldsModel"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
+        404:
+          $ref: "#/components/responses/NotFound"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
   /v1/custom_fields/fieldtypes:
     get:
       summary: Lists all available field types
@@ -53,6 +117,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/StringArray"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
   /v1/custom_fields/fieldformats:
     get:
       summary: Lists all available field value formats
@@ -65,6 +133,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/StringArray"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
   /v1/issue_statuses:
     get:
       summary: Lists all available issue statuses
@@ -78,7 +150,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/IssueStatuses"
         401:
-          description: unauthorized access
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
     post:
       summary: Adds a new issue status
       tags:
@@ -86,8 +160,12 @@ paths:
       responses:
         201:
           description: issue status was created successfully
+        400:
+          $ref: "#/components/responses/BadRequest"
         401:
-          description: unauthorized access
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
       requestBody:
         content:
           application/json:
@@ -115,8 +193,14 @@ paths:
                   "name": "Two-X",
                   "is_closed": false
                 }
+        400:
+          $ref: "#/components/responses/BadRequest"
         401:
-          description: unauthorized access
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
+        404:
+          $ref: "#/components/responses/NotFound"
       requestBody:
         content:
           application/json:
@@ -134,13 +218,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/IssueStatus"
         400:
-          description: the issue status could not be deleted
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+          $ref: "#/components/responses/BadRequest"
         401:
-          description: unauthorized access
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
+        404:
+          $ref: "#/components/responses/NotFound"
       requestBody:
         content:
           application/json:
@@ -161,8 +245,10 @@ paths:
               examples:
                 simple:
                   $ref: "#/components/examples/settingsExample"
-        '401':
-          description: unauthorized access
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
     put:
       summary: Add or update one or more settings
       tags:
@@ -171,13 +257,11 @@ paths:
         204:
           description: the sent data is valid and was saved successfully
         400:
-          description: the sent data contains invalid values and cannot be processed
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+          $ref: "#/components/responses/BadRequest"
         401:
-          description: unauthorized access
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
       requestBody:
         content:
           application/json:
@@ -196,7 +280,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Trackers"
         401:
-          description: unauthorized access
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
     post:
       summary: Adds a new tracker
       tags:
@@ -204,8 +290,12 @@ paths:
       responses:
         201:
           description: issue status was created successfully
+        400:
+          $ref: "#/components/responses/BadRequest"
         401:
-          description: unauthorized access
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
       requestBody:
         content:
           application/json:
@@ -226,8 +316,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Tracker"
+        400:
+          $ref: "#/components/responses/BadRequest"
         401:
-          description: unauthorized access
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
+        404:
+          $ref: "#/components/responses/NotFound"
       requestBody:
         content:
           application/json:
@@ -250,13 +346,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/Tracker"
         400:
-          description: the tracker could not be deleted
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+          $ref: "#/components/responses/BadRequest"
         401:
-          description: unauthorized access
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
+        404:
+          $ref: "#/components/responses/NotFound"
       requestBody:
         content:
           application/json:
@@ -268,23 +364,29 @@ paths:
       tags:
         - workflows
       responses:
-        '200':
+        200:
           description: all available workflow transitions will be returned
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/WorkflowTransitions"
-        '401':
-          description: unauthorized access
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
     patch:
       summary: Updates the given status transitions
       tags:
         - workflows
       responses:
-        '204':
+        204:
           description: update was successful
-        '401':
-          description: unauthorized access
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
       requestBody:
         content:
           application/json:
@@ -292,30 +394,9 @@ paths:
               $ref: "#/components/schemas/Transitions"
             examples:
               single:
-                value:
-                  {
-                    "role_id": [ "1" ],
-                    "tracker_id": [ "1" ],
-                    "transitions": {
-                      "123": {
-                        "1": { "always": "1" }
-                      }
-                    }
-                  }
+                $ref: "#/components/examples/transitionSinglePatch"
               multiple:
-                value:
-                  {
-                    "role_id": [ "4" ],
-                    "tracker_id": [ "23", "24" ],
-                    "transitions": {
-                      "12": {
-                        "1": { "always": "1", "author": "1", "assignee": "0" }
-                      },
-                      "123": {
-                        "12": { "always": "1", "author": "0", "assignee": "1" }
-                      }
-                    }
-                  }
+                $ref: "#/components/examples/transitionMultiplePatch"
 components:
   examples:
     settingsExample:
@@ -340,30 +421,87 @@ components:
             "updated_on": "2021-01-11T13:03:42.498Z"
           },
         ]
+    customFieldsMinimal:
+      value:
+        {
+          "type": "IssueCustomField",
+          "name": "Super Points X3",
+          "field_format": "int",
+          "role_ids": [ "1" ]
+        }
+    customFieldsFull:
+      value:
+        {
+          "type": "IssueCustomField",
+          "name": "TextField",
+          "field_format": "string",
+          "description": "This is a text field.",
+          "min_length": "2",
+          "max_length": "12",
+          "regexp": "^[A-Z0-9]+$",
+          "text_formatting": "",
+          "default_value": "AB",
+          "url_pattern": "https://google.com?q=%value%",
+          "is_required": "1",
+          "is_filter": "1",
+          "searchable": "1",
+          "visible": "0",
+          "role_ids": [ "1", "2", "3", "" ],
+          "tracker_ids": [ "1", "2", "3", "" ],
+          "is_for_all": "1"
+        }
+    customFieldsList:
+      value:
+        {
+          "type": "IssueCustomField",
+          "name": "ListField",
+          "field_format": "list",
+          "edit_tag_style": "check_box",
+          "description": "This is a list field.",
+          "possible_values": "abc\ndef\nghi",
+          "role_ids": [ "1" ]
+        }
+    transitionSinglePatch:
+      value:
+        {
+          "role_id": [ "1" ],
+          "tracker_id": [ "1" ],
+          "transitions": {
+            "123": {
+              "1": { "always": "1" }
+            }
+          }
+        }
+    transitionMultiplePatch:
+      value:
+        {
+          "role_id": [ "4" ],
+          "tracker_id": [ "23", "24" ],
+          "transitions": {
+            "12": {
+              "1": { "always": "1", "author": "1", "assignee": "0" }
+            },
+            "123": {
+              "12": { "always": "1", "author": "0", "assignee": "1" }
+            }
+          }
+        }
   securitySchemes:
     basicAuth:
       type: http
       scheme: basic
   schemas:
-    CustomFields:
-      type: array
-      items:
-        $ref: "#/components/schemas/CustomField"
-    CustomField:
+    CustomFieldsBaseModel:
       type: object
       properties:
-        id:
-          type: integer
         name:
           type: string
         field_format:
           type: string
-          enum: ['string', 'text', 'link', 'int', 'float', 'date', 'list', 'bool', 'enumeration', 'user', 'version', 'attachment']
-        possible_values:
-          type: array
-          items:
-            type: string
+          enum: [ 'string', 'text', 'link', 'int', 'float', 'date', 'list', 'bool', 'enumeration', 'user', 'version', 'attachment' ]
         regexp:
+          type: string
+        description:
           type: string
         min_length:
           type: integer
@@ -371,24 +509,82 @@ components:
           type: integer
         is_required:
           type: boolean
-        is_for_all:
-          type: boolean
-        is_filter:
-          type: boolean
         searchable:
           type: boolean
         default_value:
           type: string
-        editable:
+        is_for_all:
+          type: boolean
+        is_filter:
           type: boolean
         visible:
           type: boolean
-        multiple:
-          type: boolean
-        format_store:
-          type: object
-        description:
-          type: string
+    CustomFieldsPost:
+      allOf:
+        - type: object
+          properties:
+            name:
+              type: string
+              required: true
+            type:
+              type: string
+              description: target type of the custom field (e.g. IssueCustomField)
+              required: true
+            field_format:
+              type: string
+              required: true
+            role_ids:
+              type: array
+              required: true
+              items:
+                type: string
+            edit_tag_style:
+              type: string
+            url_pattern:
+              type: string
+            tracker_ids:
+              type: array
+              items:
+                type: string
+        - $ref: "#/components/schemas/CustomFieldsBaseModel"
+    CustomFieldsPatch:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: integer
+              required: true
+            edit_tag_style:
+              type: string
+            url_pattern:
+              type: string
+        - $ref: "#/components/schemas/CustomFieldsBaseModel"
+    CustomFields:
+      type: array
+      items:
+        $ref: "#/components/schemas/CustomFieldsModel"
+    CustomFieldsModel:
+      allOf:
+        - $ref: "#/components/schemas/CustomFieldsBaseModel"
+        - type: object
+          properties:
+            id:
+              type: integer
+            possible_values:
+              type: array
+              items:
+                type: string
+            editable:
+              type: boolean
+            multiple:
+              type: boolean
+            format_store:
+              type: object
+              properties:
+                edit_tag_style:
+                  type: string
+                url_pattern:
+                  type: string
     StringArray:
       type: array
       items:
@@ -563,5 +759,18 @@ components:
       properties:
         id:
           type: string
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    UnauthorizedAccess:
+      description: Unauthorized access
+    Forbidden:
+      description: Forbidden - the API is not enabled or the user has insufficient privileges to execute this action.
+    NotFound:
+      description: Not found
 security:
   - basicAuth: []
