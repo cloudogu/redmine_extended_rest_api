@@ -458,7 +458,11 @@ components:
           "field_format": "list",
           "edit_tag_style": "check_box",
           "description": "This is a list field.",
-          "possible_values": "abc\ndef\nghi",
+          "possible_values": [
+              "value 1",
+              "value 2",
+              "value 3"
+          ],
           "role_ids": [ "1" ]
         }
     transitionSinglePatch:
@@ -501,6 +505,10 @@ components:
           enum: [ 'string', 'text', 'link', 'int', 'float', 'date', 'list', 'bool', 'enumeration', 'user', 'version', 'attachment' ]
         regexp:
           type: string
+        possible_values:
+          type: array
+          items:
+            type: string
         description:
           type: string
         min_length:

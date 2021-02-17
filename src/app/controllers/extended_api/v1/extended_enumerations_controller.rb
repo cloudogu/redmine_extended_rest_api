@@ -1,8 +1,6 @@
 module ExtendedApi
   module V1
     class ExtendedEnumerationsController < ExtendedApplicationController
-      before_action :require_login
-      skip_before_action :verify_authenticity_token
       accept_api_auth :show, :create, :update, :destroy
       before_action :find_enumeration, :only => [:update, :destroy]
 

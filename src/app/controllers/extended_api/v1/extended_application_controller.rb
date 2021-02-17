@@ -1,6 +1,9 @@
 module ExtendedApi
   module V1
     class ExtendedApplicationController < ApplicationController
+      before_action :require_login
+      before_action :require_admin
+      skip_before_action :verify_authenticity_token
       # @return [TrueClass, FalseClass]
       def require_login
         unless User.current.logged?

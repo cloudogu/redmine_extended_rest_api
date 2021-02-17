@@ -1,8 +1,6 @@
 module ExtendedApi
   module V1
     class ExtendedIssueStatusesController < ExtendedApplicationController
-      before_action :require_login
-      skip_before_action :verify_authenticity_token
       accept_api_auth :create, :show, :update, :destroy
 
       def show

@@ -1,9 +1,7 @@
 module ExtendedApi
   module V1
     class ExtendedCustomFieldsController < ExtendedApplicationController
-      before_action :require_login
-      skip_before_action :verify_authenticity_token
-      accept_api_auth :show, :create, :update, :destroy, :fieldtypes, :fieldformats
+      accept_api_auth :show, :create, :update, :destroy, :field_types, :field_formats
 
       before_action :find_custom_field, :only => [:update, :destroy]
 
@@ -11,11 +9,11 @@ module ExtendedApi
         render json: CustomField.all
       end
 
-      def fieldtypes
+      def field_types
         render json: list_possible_types
       end
 
-      def fieldformats
+      def field_formats
         render json: Redmine::FieldFormat.available_formats
       end
 

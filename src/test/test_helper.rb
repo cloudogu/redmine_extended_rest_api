@@ -5,6 +5,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../../test/test_helper')
 
 module TestHeaders
   AUTH_HEADER_ADMIN = { :Authorization => 'Basic YWRtaW46YWRtaW4=' }
+  AUTH_HEADER_USER = { :Authorization => 'Basic dXNlcjphZG1pbg==' }
   AUTH_HEADER_WRONG = { :Authorization => 'Basic YWRtaW46YWRtaW1=' }
   CONTENT_TYPE_JSON_HEADER = { 'Content-Type' => 'application/json' }
 end
