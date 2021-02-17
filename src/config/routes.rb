@@ -26,7 +26,7 @@ namespace :extended_api do
     get 'settings', action: :show, controller: 'extended_settings'
     put 'settings', action: :update, controller: 'extended_settings'
 
-    get 'spec', :to => redirect('plugin_assets/redmine_extended_rest_api/openapi.yml')
+    get 'spec', to: redirect('plugin_assets/redmine_extended_rest_api/openapi.yml')
 
     get 'trackers', action: :show, controller: 'extended_trackers'
     post 'trackers', action: :create, controller: 'extended_trackers'
