@@ -8,6 +8,76 @@ servers:
   - url: https://192.168.56.2/redmine/extended_api
     description: local development instance inside a CES
 paths:
+  /v1/enumerations:
+    get:
+      summary: Lists all available enumerations
+      tags:
+        - enumerations
+      responses:
+        200:
+          description: mkay
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
+  /v1/enumerations/enumtypes:
+    get:
+      summary: Lists all available enumeration types
+      tags:
+        - enumerations
+      responses:
+        200:
+          description: mkay
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
+  /v1/enumerations/{type}/customfields:
+    get:
+      summary: Lists the custom field information for a specified enumeration type
+      tags:
+        - enumerations
+      responses:
+        200:
+          description: mkay
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
+  /v1/custom_fields/fieldtypes:
+    get:
+      summary: Lists all available field types
+      tags:
+        - custom fields
+      responses:
+        200:
+          description: all available field types
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StringArray"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
+  /v1/custom_fields/fieldformats:
+    get:
+      summary: Lists all available field value formats
+      tags:
+        - custom fields
+      responses:
+        200:
+          description: all available field value formats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StringArray"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
   /v1/custom_fields:
     get:
       summary: Lists all available custom fields
@@ -20,8 +90,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CustomFields"
-        400:
-          $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/UnauthorizedAccess"
         403:
@@ -105,38 +173,6 @@ paths:
               properties:
                 id:
                   type: integer
-  /v1/custom_fields/fieldtypes:
-    get:
-      summary: Lists all available field types
-      tags:
-        - custom fields
-      responses:
-        200:
-          description: all available field types
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/StringArray"
-        401:
-          $ref: "#/components/responses/UnauthorizedAccess"
-        403:
-          $ref: "#/components/responses/Forbidden"
-  /v1/custom_fields/fieldformats:
-    get:
-      summary: Lists all available field value formats
-      tags:
-        - custom fields
-      responses:
-        200:
-          description: all available field value formats
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/StringArray"
-        401:
-          $ref: "#/components/responses/UnauthorizedAccess"
-        403:
-          $ref: "#/components/responses/Forbidden"
   /v1/issue_statuses:
     get:
       summary: Lists all available issue statuses
