@@ -1,0 +1,31 @@
+--- 
+enumerations_001: 
+  name: CustomIssuePrio001
+  id: 100
+  type: IssuePriority
+  active: true
+  position: 100
+enumerations_002:
+  name: CustomIssuePrio002
+  id: 101
+  type: IssuePriority
+  active: true
+  position: 101
+enumerations_003:
+  name: UpdateMe
+  id: 102
+  type: IssuePriority
+  active: true
+  position: 102
+enumerations_004:
+  name: DeleteMe
+  id: 103
+  type: IssuePriority
+  active: true
+  position: 103
+enumerations_100:
+  name: CustomDocumentCategory001
+  id: 200
+  type: DocumentCategory
+  active: true
+  position: 200

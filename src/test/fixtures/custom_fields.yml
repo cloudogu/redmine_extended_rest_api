@@ -47,3 +47,12 @@ custom_fields_004:
   default_value: ""
   editable: true
   position: 4
+custom_fields_005:
+  name: IssuePrioCF
+  id: 5
+  type: IssuePriorityCustomField
+  is_required: false
+  field_format: string
+  default_value: ""
+  editable: true
+  position: 5

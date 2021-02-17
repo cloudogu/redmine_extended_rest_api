@@ -29,6 +29,12 @@ module ExtendedApi
         @status = arg[:status] || 500
         render status: @status, json: { "errors": [ @message ] }
       end
+
+      def render_400(arg)
+        @message = arg[:message]
+        render_error({:message => @message, :status => :bad_request})
+        return false
+      end
     end
   end
 end

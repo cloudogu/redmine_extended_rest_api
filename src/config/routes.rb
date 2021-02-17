@@ -3,7 +3,6 @@
 
 namespace :extended_api do
   namespace :v1 do
-
     get 'custom_fields', action: :show, controller: 'extended_custom_fields'
     get 'custom_fields/fieldtypes', action: :field_types, controller: 'extended_custom_fields'
     get 'custom_fields/fieldformats', action: :field_formats, controller: 'extended_custom_fields'
@@ -12,6 +11,9 @@ namespace :extended_api do
     delete 'custom_fields', action: :destroy, controller: 'extended_custom_fields'
 
     get 'enumerations', action: :show, controller: 'extended_enumerations'
+    get 'enumerations/enumtypes', action: :enum_types, controller: 'extended_enumerations'
+    get 'enumerations/:type', action: :show, controller: 'extended_enumerations'
+    get 'enumerations/:type/customfields', action: :custom_fields, controller: 'extended_enumerations'
     post 'enumerations', action: :create, controller: 'extended_enumerations'
     patch 'enumerations', action: :update, controller: 'extended_enumerations'
     delete 'enumerations', action: :destroy, controller: 'extended_enumerations'
