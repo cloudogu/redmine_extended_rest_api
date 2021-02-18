@@ -790,10 +790,6 @@ components:
     EnumBody:
       type: object
       properties:
-        name:
-          type: string
-          required: true
-
         is_default:
           type: boolean
           default: false
@@ -818,6 +814,9 @@ components:
       allOf:
         - type: object
           properties:
+            name:
+              type: string
+              required: true
             type:
               type: string
               required: true
@@ -837,6 +836,9 @@ components:
             id:
               type: integer
               required: true
+            name:
+              type: string
+              required: false
         - $ref: "#/components/schemas/EnumBody"
       example:
         {
