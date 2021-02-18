@@ -101,31 +101,6 @@ paths:
               properties:
                 id:
                   type: integer
-
-  /v1/enumerations/{type}:
-    get:
-      summary: Lists all available enumerations
-      tags:
-        - enumerations
-      responses:
-        200:
-          description: mkay
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Enumerations"
-        401:
-          $ref: "#/components/responses/UnauthorizedAccess"
-        403:
-          $ref: "#/components/responses/Forbidden"
-      parameters:
-        - in: path
-          name: type
-          schema:
-            type: string
-          example: DocumentCategory
-          required: false
-          description: name of the enumeration type
   /v1/enumerations/enumtypes:
     get:
       summary: Lists all available enumeration types

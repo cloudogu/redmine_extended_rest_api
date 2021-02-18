@@ -9,8 +9,8 @@ module ExtendedApi
         @enumeration = Enumeration.get_subclass(params[:type])
         if @enumeration
           render json: @enumeration.shared.sorted
-        elsif !params[:type]
-          render_404 message: "could not find any enumeration with type '#{params[:type]}'"
+        elsif params.key?(:type) && params[:type]!=''
+          render_404 message: "could not find any enumeration of type '#{params[:type]}'"
         else
           render json: Enumeration.shared.sorted
         end

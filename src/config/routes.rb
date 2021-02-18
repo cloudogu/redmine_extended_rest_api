@@ -12,7 +12,6 @@ namespace :extended_api do
 
     get 'enumerations', action: :show, controller: 'extended_enumerations'
     get 'enumerations/enumtypes', action: :enum_types, controller: 'extended_enumerations'
-    get 'enumerations/:type', action: :show, controller: 'extended_enumerations'
     get 'enumerations/:type/customfields', action: :custom_fields, controller: 'extended_enumerations'
     post 'enumerations', action: :create, controller: 'extended_enumerations'
     patch 'enumerations', action: :update, controller: 'extended_enumerations'
