@@ -16,10 +16,116 @@ paths:
       responses:
         200:
           description: mkay
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Enumerations"
         401:
           $ref: "#/components/responses/UnauthorizedAccess"
         403:
           $ref: "#/components/responses/Forbidden"
+      parameters:
+        - in: query
+          name: type
+          schema:
+            type: string
+          example: DocumentCategory
+          required: false
+          description: name of the enumeration type
+    post:
+      summary: Creates a new enumeration
+      tags:
+        - enumerations
+      responses:
+        200:
+          description: the created enumeration
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Enumeration"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EnumPostBody"
+    patch:
+      summary: Updates an existing enumeration
+      tags:
+        - enumerations
+      responses:
+        200:
+          description: the updated enumeration
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Enumeration"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EnumPatchBody"
+    delete:
+      summary: Deletes an existing enumeration
+      tags:
+        - enumerations
+      responses:
+        200:
+          description: the deleted enumeration
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Enumeration"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+
+  /v1/enumerations/{type}:
+    get:
+      summary: Lists all available enumerations
+      tags:
+        - enumerations
+      responses:
+        200:
+          description: mkay
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Enumerations"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
+      parameters:
+        - in: path
+          name: type
+          schema:
+            type: string
+          example: DocumentCategory
+          required: false
+          description: name of the enumeration type
   /v1/enumerations/enumtypes:
     get:
       summary: Lists all available enumeration types
@@ -27,7 +133,11 @@ paths:
         - enumerations
       responses:
         200:
-          description: mkay
+          description: list of available enumeration types
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StringArray"
         401:
           $ref: "#/components/responses/UnauthorizedAccess"
         403:
@@ -39,13 +149,25 @@ paths:
         - enumerations
       responses:
         200:
-          description: mkay
+          description: list of custom field information for the specified enumeration type
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EnumCustomFields"
         400:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/UnauthorizedAccess"
         403:
           $ref: "#/components/responses/Forbidden"
+      parameters:
+        - in: path
+          name: type
+          schema:
+            type: string
+          example: DocumentCategory
+          required: true
+          description: name of the enumeration type
   /v1/custom_fields/fieldtypes:
     get:
       summary: Lists all available field types
@@ -629,6 +751,101 @@ components:
                   type: string
                 url_pattern:
                   type: string
+    Enumerations:
+      type: array
+      items:
+        $ref: "#/components/schemas/Enumeration"
+    Enumeration:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        position:
+          type: integer
+        is_default:
+          type: boolean
+        active:
+          type: boolean
+        project_id:
+          type: integer
+        parent_id:
+          type: integer
+        position_name:
+          type: string
+    EnumCustomFields:
+      type: array
+      items:
+        $ref: "#/components/schemas/EnumCustomField"
+    EnumCustomField:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        format:
+          type: string
+    EnumBody:
+      type: object
+      properties:
+        name:
+          type: string
+          required: true
+
+        is_default:
+          type: boolean
+          default: false
+        active:
+          type: boolean
+          default: true
+        project_id:
+          type: integer
+          default: null
+        parent_id:
+          type: integer
+          default: null
+        position_name:
+          type: string
+          default: null
+        custom_field_values:
+          required: false
+          type: object
+          additionalProperties:
+            type: string
+    EnumPostBody:
+      allOf:
+        - type: object
+          properties:
+            type:
+              type: string
+              required: true
+        - $ref: "#/components/schemas/EnumBody"
+      example:
+        {
+          "type": "IssuePriority",
+          "name": "Example Name",
+          "custom_field_values": {
+            "20": "content for custom field with id 20"
+          }
+        }
+    EnumPatchBody:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: integer
+              required: true
+        - $ref: "#/components/schemas/EnumBody"
+      example:
+        {
+          "id": "15",
+          "name": "Example Name",
+          "custom_field_values": {
+            "20": "content for custom field with id 20"
+          }
+        }
     StringArray:
       type: array
       items:
