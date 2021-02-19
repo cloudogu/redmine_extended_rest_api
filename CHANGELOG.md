@@ -7,7 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- endpoints for trackers, issue statuses and workflows
+- endpoints for 
+  - trackers, 
+  - issue statuses 
+  - workflows
+  - enumerations
+  - custom fields
 - route mapping for api documentation `/extended_api/v1/spec`
 
 ### Changed

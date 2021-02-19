@@ -6,7 +6,12 @@ module ExtendedApi
       before_action :find_custom_field, :only => [:update, :destroy]
 
       def show
-        render json: CustomField.all
+        @klass = CustomField.get_subclass(params[:type])
+        if @klass
+          render json: CustomField.where(:type => params[:type])
+        else
+          render json: CustomField.all
+        end
       end
 
       def field_types

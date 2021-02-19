@@ -8,6 +8,50 @@ servers:
   - url: https://192.168.56.2/redmine/extended_api
     description: local development instance inside a CES
 paths:
+  /v1/enumerations/enumtypes:
+    get:
+      summary: Lists all available enumeration types
+      tags:
+        - enumerations
+      responses:
+        200:
+          description: list of available enumeration types
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StringArray"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
+  /v1/enumerations/{type}/customfields:
+    get:
+      summary: Lists the custom field information for a specified enumeration type
+      tags:
+        - enumerations
+      responses:
+        200:
+          description: list of custom field information for the specified enumeration type
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EnumCustomFields"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
+        404:
+          $ref: "#/components/responses/NotFound"
+      parameters:
+        - in: path
+          name: type
+          schema:
+            type: string
+          example: DocumentCategory
+          required: true
+          description: name of the enumeration type
   /v1/enumerations:
     get:
       summary: Lists all available enumerations
@@ -24,6 +68,8 @@ paths:
           $ref: "#/components/responses/UnauthorizedAccess"
         403:
           $ref: "#/components/responses/Forbidden"
+        404:
+          $ref: "#/components/responses/NotFound"
       parameters:
         - in: query
           name: type
@@ -71,6 +117,8 @@ paths:
           $ref: "#/components/responses/UnauthorizedAccess"
         403:
           $ref: "#/components/responses/Forbidden"
+        404:
+          $ref: "#/components/responses/NotFound"
       requestBody:
         content:
           application/json:
@@ -93,6 +141,8 @@ paths:
           $ref: "#/components/responses/UnauthorizedAccess"
         403:
           $ref: "#/components/responses/Forbidden"
+        404:
+          $ref: "#/components/responses/NotFound"
       requestBody:
         content:
           application/json:
@@ -101,48 +151,6 @@ paths:
               properties:
                 id:
                   type: integer
-  /v1/enumerations/enumtypes:
-    get:
-      summary: Lists all available enumeration types
-      tags:
-        - enumerations
-      responses:
-        200:
-          description: list of available enumeration types
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/StringArray"
-        401:
-          $ref: "#/components/responses/UnauthorizedAccess"
-        403:
-          $ref: "#/components/responses/Forbidden"
-  /v1/enumerations/{type}/customfields:
-    get:
-      summary: Lists the custom field information for a specified enumeration type
-      tags:
-        - enumerations
-      responses:
-        200:
-          description: list of custom field information for the specified enumeration type
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/EnumCustomFields"
-        400:
-          $ref: "#/components/responses/BadRequest"
-        401:
-          $ref: "#/components/responses/UnauthorizedAccess"
-        403:
-          $ref: "#/components/responses/Forbidden"
-      parameters:
-        - in: path
-          name: type
-          schema:
-            type: string
-          example: DocumentCategory
-          required: true
-          description: name of the enumeration type
   /v1/custom_fields/fieldtypes:
     get:
       summary: Lists all available field types
@@ -191,6 +199,14 @@ paths:
           $ref: "#/components/responses/UnauthorizedAccess"
         403:
           $ref: "#/components/responses/Forbidden"
+      parameters:
+        - in: query
+          name: type
+          schema:
+            type: string
+          example: IssueCustomField
+          required: false
+          description: name of the enumeration type
     patch:
       summary: Updates an existing custom field
       tags:
@@ -208,6 +224,8 @@ paths:
           $ref: "#/components/responses/UnauthorizedAccess"
         403:
           $ref: "#/components/responses/Forbidden"
+        404:
+          $ref: "#/components/responses/NotFound"
       requestBody:
         content:
           application/json:

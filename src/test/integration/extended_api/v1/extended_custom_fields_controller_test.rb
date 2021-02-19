@@ -161,6 +161,20 @@ class ExtendedApi::V1::ExtendedCustomFieldsControllerTest < ActionController::Te
                           'field_format' => 'int'
   end
 
+  test 'show lists a set of custom fields for type IssueCustomField' do
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
+
+    get :show, params: { "type": 'IssuePriorityCustomField'}
+
+    assert_response :success
+    custom_field_list = @response.json_body
+    assert_contains_entry custom_field_list,
+                          'id' => 5,
+                          'name' => 'IssuePrioCF',
+                          'field_format' => 'string'
+  end
+
   test 'create inserts a new custom field' do
     request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
     request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
