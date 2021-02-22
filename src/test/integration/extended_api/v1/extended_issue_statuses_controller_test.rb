@@ -53,6 +53,54 @@ class ExtendedApi::V1::ExtendedIssueStatusesControllerTest < ActionController::T
     assert_response :unauthorized
   end
 
+  test 'show responds with 403 if user is not an admin' do
+    request.headers.merge! TestHeaders::AUTH_HEADER_USER
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
+
+    get :show
+
+    assert_response :forbidden
+    error = @response.json_body['errors']
+    expected_error_message = ['Sie sind nicht berechtigt, auf diese Seite zuzugreifen.']
+    assert_equal expected_error_message, error
+  end
+
+  test 'create responds with 403 if user is not an admin' do
+    request.headers.merge! TestHeaders::AUTH_HEADER_USER
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
+
+    post :create
+
+    assert_response :forbidden
+    error = @response.json_body['errors']
+    expected_error_message = ['Sie sind nicht berechtigt, auf diese Seite zuzugreifen.']
+    assert_equal expected_error_message, error
+  end
+
+  test 'update responds with 403 if user is not an admin' do
+    request.headers.merge! TestHeaders::AUTH_HEADER_USER
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
+
+    patch :update
+
+    assert_response :forbidden
+    error = @response.json_body['errors']
+    expected_error_message = ['Sie sind nicht berechtigt, auf diese Seite zuzugreifen.']
+    assert_equal expected_error_message, error
+  end
+
+  test 'destroy responds with 403 if user is not an admin' do
+    request.headers.merge! TestHeaders::AUTH_HEADER_USER
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
+
+    delete :destroy
+
+    assert_response :forbidden
+    error = @response.json_body['errors']
+    expected_error_message = ['Sie sind nicht berechtigt, auf diese Seite zuzugreifen.']
+    assert_equal expected_error_message, error
+  end
+
   test 'show responds with a list of issue statuses' do
     request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
 
