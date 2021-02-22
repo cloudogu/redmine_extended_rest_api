@@ -120,12 +120,8 @@ class ExtendedApi::V1::ExtendedTrackersControllerTest < ActionController::TestCa
     post :create, body: json
 
     assert_response :created
-
-    get :show
-
-    assert_response :success, @response.body
-    trackers = @response.json_body
-    assert_contains_entry trackers, 'name' => 'megabug', 'description' => 'my description', 'default_status_id' => 55
+    tracker = @response.json_body
+    assert_contains_entry [tracker], 'name' => 'megabug', 'description' => 'my description', 'default_status_id' => 55
   end
 
   test 'create fails if default status is missing' do

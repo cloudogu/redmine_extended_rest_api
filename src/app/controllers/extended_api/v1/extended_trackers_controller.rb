@@ -18,7 +18,7 @@ module ExtendedApi
             if !params[:copy_workflow_from].blank? && (copy_from = Tracker.find_by_id(params[:copy_workflow_from]))
               @tracker.copy_workflow_rules(copy_from)
             end
-            render json: {}, status: :created
+            render json: @tracker, status: :created
           else
             render json: { errors: @tracker.errors }, status: :bad_request
           end

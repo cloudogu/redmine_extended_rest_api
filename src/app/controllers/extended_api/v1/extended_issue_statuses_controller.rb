@@ -9,12 +9,12 @@ module ExtendedApi
 
       def create
         if params.nil? || params.empty?
-          render :status => :bad_request, :json => { errors: 'no issue status data provided' }
+          render status: :bad_request, json: { errors: 'no issue status data provided' }
         else
           @issue_status = IssueStatus.new
           @issue_status.safe_attributes = params
           if @issue_status.save
-            render json: {}, status: :created
+            render json: @issue_status, status: :created
           else
             render json: { errors: @issue_status.errors }, status: :bad_request
           end
@@ -23,16 +23,16 @@ module ExtendedApi
 
       def update
         if params[:id].nil?
-          render :status => :bad_request, :json => { errors: 'no issue status id provided' }
+          render status: :bad_request, json: { errors: 'no issue status id provided' }
         elsif params.nil?
-          render :status => :bad_request, :json => { errors: 'no issue status data provided' }
+          render status: :bad_request, json: { errors: 'no issue status data provided' }
         else
           @issue_status = IssueStatus.find(params[:id])
           @issue_status.safe_attributes = params
           if @issue_status.save
-            render :json => @issue_status
+            render json: @issue_status
           else
-            render :status => :bad_request, :json => { errors: @issue_status.errors }
+            render status: :bad_request, json: { errors: @issue_status.errors }
           end
         end
       end

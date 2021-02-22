@@ -119,12 +119,8 @@ class ExtendedApi::V1::ExtendedIssueStatusesControllerTest < ActionController::T
     post :create, body: json
 
     assert_response :created
-
-    get :show
-
-    assert_response :success, @response.body
-    issue_statuses = @response.json_body
-    assert_contains_entry issue_statuses, 'name' => 'test-status-001', 'is_closed' => 'true'
+    issue_status = @response.json_body
+    assert_contains_entry [issue_status], 'name' => 'test-status-001', 'is_closed' => 'true'
   end
 
   test 'create fails if name is missing' do
