@@ -1,8 +1,6 @@
 module ExtendedApi
   module V1
-    class ExtendedTrackersController < ApplicationController
-      before_action :require_login
-      skip_before_action :verify_authenticity_token
+    class ExtendedTrackersController < ExtendedApplicationController
       accept_api_auth :create, :show, :update, :destroy
 
       def show
@@ -20,7 +18,7 @@ module ExtendedApi
             if !params[:copy_workflow_from].blank? && (copy_from = Tracker.find_by_id(params[:copy_workflow_from]))
               @tracker.copy_workflow_rules(copy_from)
             end
-            render json: {}, status: :created
+            render json: @tracker, status: :created
           else
             render json: { errors: @tracker.errors }, status: :bad_request
           end

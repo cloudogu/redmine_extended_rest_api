@@ -4,39 +4,67 @@ class ExtendedApi::V1::ExtendedSettingsControllerTest < ActionController::TestCa
   fixtures :settings
   fixtures :users
 
-  accept_header = { 'Accept' => 'application/json' }
-  content_type_header = { 'Content-Type' => 'application/json' }
-  auth_header_wrong = { :Authorization => 'Basic YWRtaW46YWRtaW1=' }
-  auth_header = { :Authorization => 'Basic YWRtaW46YWRtaW4=' }
-
   test 'check for correct route generation' do
     assert_routing({ method: :get, path: 'extended_api/v1/settings' }, { controller: 'extended_api/v1/extended_settings', action: 'show' })
     assert_routing({ method: :put, path: 'extended_api/v1/settings' }, { controller: 'extended_api/v1/extended_settings', action: 'update' })
   end
 
   test 'show responds with 401 on unauthorized access' do
-    request.headers.merge! auth_header_wrong
-    request.headers.merge! content_type_header
-    request.headers.merge! accept_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_WRONG
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     get :show
 
     assert_response :unauthorized
   end
 
+  test 'update responds with 401 on unauthorized access' do
+    request.headers.merge! TestHeaders::AUTH_HEADER_WRONG
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
+
+    json = {}.to_json
+    put :update, body: json
+
+    assert_response :unauthorized
+  end
+
+  test 'show responds with 403 if user is not an admin' do
+    request.headers.merge! TestHeaders::AUTH_HEADER_USER
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
+
+    get :show
+
+    assert_response :forbidden
+    error = @response.json_body['errors']
+    expected_error_message = ['Sie sind nicht berechtigt, auf diese Seite zuzugreifen.']
+    assert_equal expected_error_message, error
+  end
+
+  test 'update responds with 403 if user is not an admin' do
+    request.headers.merge! TestHeaders::AUTH_HEADER_USER
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
+
+    put :update
+
+    assert_response :forbidden
+    error = @response.json_body['errors']
+    expected_error_message = ['Sie sind nicht berechtigt, auf diese Seite zuzugreifen.']
+    assert_equal expected_error_message, error
+  end
+
   test 'show returns a list of available settings' do
-    request.headers.merge! auth_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
 
     get :show
 
     assert_response :success, @response.body
     settings = @response.json_body
-    assert_contains settings, 'app_title', 'Megamine'
+    assert_settings_contains settings, 'app_title', 'Megamine'
   end
 
   test 'update updates the app_title setting' do
-    request.headers.merge! auth_header
-    request.headers.merge! content_type_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     json = { app_title: 'Minimine' }.to_json
     put :update, body: json
@@ -47,23 +75,12 @@ class ExtendedApi::V1::ExtendedSettingsControllerTest < ActionController::TestCa
 
     assert_response :success, @response.body
     settings = @response.json_body
-    assert_contains settings, 'app_title', 'Minimine'
-  end
-
-  test 'update responds with unauthorized' do
-    request.headers.merge! auth_header_wrong
-    request.headers.merge! content_type_header
-    request.headers.merge! accept_header
-
-    json = {}.to_json
-    put :update, body: json
-
-    assert_response :unauthorized
+    assert_settings_contains settings, 'app_title', 'Minimine'
   end
 
   test 'update fails with validation error' do
-    request.headers.merge! auth_header
-    request.headers.merge! content_type_header
+    request.headers.merge! TestHeaders::AUTH_HEADER_ADMIN
+    request.headers.merge! TestHeaders::CONTENT_TYPE_JSON_HEADER
 
     json = { mail_from: 'wrong-mail-address' }.to_json
     put :update, body: json

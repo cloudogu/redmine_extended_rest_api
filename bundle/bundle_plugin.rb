@@ -1,14 +1,32 @@
 #!/usr/bin/ruby
 
 require 'fileutils'
+require 'erb'
+require 'optparse'
 
-PLUGIN_DIR="redmine_extended_rest_api"
-FileUtils.mkdir_p(PLUGIN_DIR)
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: bundle_plugin.rb [options]"
+  opts.on('-d', '--directory DIR', 'Directory where the files will be copied to') { |v| options[:directory] = v }
+end.parse!
 
-FileUtils.cp"../src/Gemfile", PLUGIN_DIR + "/Gemfile", :verbose => true
-FileUtils.cp"../src/init.rb", PLUGIN_DIR + "/init.rb", :verbose => true
-FileUtils.cp_r "../src/app/.", PLUGIN_DIR + "/app", :verbose => true
-FileUtils.cp_r "../src/config/.", PLUGIN_DIR + "/config", :verbose => true
-FileUtils.cp_r "../src/lib/.", PLUGIN_DIR + "/lib", :verbose => true
-FileUtils.cp_r "../src/assets/.", PLUGIN_DIR + "/assets", :verbose => true
+if !options[:directory] || options[:directory] == '.'
+  target_directory = "."
+else
+  target_directory = options[:directory]
+end
+puts "Copy files to '#{target_directory}'"
+
+PLUGIN_DIR = 'redmine_extended_rest_api'
+SOURCE_DIR = '../src'
+FileUtils.mkdir_p(File.join(target_directory, PLUGIN_DIR))
+
+files = Dir.entries(SOURCE_DIR)
+directories = files.select { |entry| File.directory? File.join(SOURCE_DIR, entry) and !(entry == '.' || entry == '..' || entry == 'test') and !entry.start_with? '.' }
+directories.each do |directory|
+  FileUtils.cp_r File.join(SOURCE_DIR, directory), File.join(PLUGIN_DIR, directory), :verbose => true
+end
+FileUtils.cp File.join(SOURCE_DIR, 'Gemfile.prod'), File.join(PLUGIN_DIR, 'Gemfile'), :verbose => true
+FileUtils.cp File.join(SOURCE_DIR, 'init.rb'), File.join(PLUGIN_DIR, 'init.rb'), :verbose => true
+
 
