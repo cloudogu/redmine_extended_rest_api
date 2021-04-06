@@ -327,10 +327,10 @@ paths:
             schema:
               $ref: "#/components/schemas/IssueStatus"
             example:
-                {
-                  "name": "One-X",
-                  "is_closed": true
-                }
+              {
+                "name": "One-X",
+                "is_closed": true
+              }
     patch:
       summary: Updates an existing issue status
       tags:
@@ -462,7 +462,9 @@ paths:
               $ref: "#/components/schemas/Tracker"
             example:
               {
-                "name": "new feature tracker"
+                "name": "new feature tracker",
+                "default_status_id": 1,
+                "description": "my description"
               }
     patch:
       summary: Updates an existing tracker
@@ -491,7 +493,7 @@ paths:
             example:
               {
                 "id": 1,
-                 "name": "tracker to update"
+                "name": "tracker to update"
               }
     delete:
       summary: Deletes a tracker
@@ -1016,7 +1018,7 @@ components:
             type: string
       example:
         {
-          "errors": ["failed to save data", "item not found"]
+          "errors": [ "failed to save data", "item not found" ]
         }
     DeleteBody:
       type: object
@@ -1037,4 +1039,4 @@ components:
     NotFound:
       description: Not found
 security:
-  - basicAuth: []
+  - basicAuth: [ ]
