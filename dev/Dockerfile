@@ -13,7 +13,7 @@ RUN groupadd -r -g 999 redmine && useradd -r -g redmine -u 999 redmine
 RUN set -eux; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
-		ca-certificates wget bzr git mercurial openssh-client \
+		ca-certificates wget bzr git mercurial openssh-client shared-mime-info \
 		subversion ghostscript gsfonts imagemagick dirmngr gnupg; \
 	rm -rf /var/lib/apt/lists/*
 
