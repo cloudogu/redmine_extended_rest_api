@@ -25,7 +25,7 @@ namespace :extended_api do
     get 'roles', action: :show, controller: 'extended_roles'
     get 'roles(/:id)/permissions', action: :perms, controller: 'extended_roles'
     post 'roles', action: :create, controller: 'extended_roles'
-    patch 'roles/:id', action: :update, controller: 'extended_roles'
+    patch 'roles(/:id)', action: :update, controller: 'extended_roles'
     delete 'roles(/:id)', action: :destroy, controller: 'extended_roles'
 
     get 'settings', action: :show, controller: 'extended_settings'

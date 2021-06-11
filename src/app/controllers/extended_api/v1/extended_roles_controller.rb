@@ -52,9 +52,7 @@ module ExtendedApi
 
       def destroy
         begin
-          if @role.destroy
-            render json: @role
-          end
+          render json: @role if @role.destroy
         rescue => e
           render_400 message: e.message
         end
@@ -63,9 +61,7 @@ module ExtendedApi
       private
 
       def find_role
-        if params[:id]
-          @role = Role.find(params[:id])
-        end
+        @role = Role.find(params[:id]) if params[:id]
       rescue ActiveRecord::RecordNotFound
         render_404 message: "role with id '#{params[:id]}' could not be found"
       end
@@ -73,8 +69,12 @@ module ExtendedApi
       def setable_permissions(role = nil)
         setable_permissions = Redmine::AccessControl.permissions - Redmine::AccessControl.public_permissions
         if role
-          setable_permissions -= Redmine::AccessControl.members_only_permissions if role.builtin == Role::BUILTIN_NON_MEMBER
-          setable_permissions -= Redmine::AccessControl.loggedin_only_permissions if role.builtin == Role::BUILTIN_ANONYMOUS
+          if role.builtin == Role::BUILTIN_NON_MEMBER
+            setable_permissions -= Redmine::AccessControl.members_only_permissions
+          end
+          if role.builtin == Role::BUILTIN_ANONYMOUS
+            setable_permissions -= Redmine::AccessControl.loggedin_only_permissions
+          end
         end
         setable_permissions
       end
