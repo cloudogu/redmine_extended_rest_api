@@ -216,3 +216,95 @@ roles_005:
     - :view_changesets
 
   position: 1
+roles_006:
+  name: CannotBeDeleted
+  id: 6
+  builtin: 0
+  issues_visibility: default
+  users_visibility: all
+  permissions: |
+    ---
+    - :view_issues
+    - :add_issue_notes
+    - :view_gantt
+    - :view_calendar
+    - :view_time_entries
+    - :view_news
+    - :view_documents
+    - :view_wiki_pages
+    - :view_wiki_edits
+    - :view_messages
+    - :view_files
+    - :browse_repository
+    - :view_changesets
+
+  position: 1
+roles_007:
+  name: Delete Me!
+  id: 7
+  builtin: 0
+  issues_visibility: default
+  users_visibility: all
+  permissions: |
+    ---
+    - :view_issues
+    - :add_issue_notes
+    - :view_gantt
+    - :view_calendar
+    - :view_time_entries
+    - :view_news
+    - :view_documents
+    - :view_wiki_pages
+    - :view_wiki_edits
+    - :view_messages
+    - :view_files
+    - :browse_repository
+    - :view_changesets
+
+  position: 1
+roles_008:
+  name: ChangeMe
+  id: 8
+  builtin: 0
+  issues_visibility: default
+  users_visibility: all
+  permissions: |
+    ---
+    - :view_issues
+    - :add_issue_notes
+    - :view_gantt
+    - :view_calendar
+    - :view_time_entries
+    - :view_news
+    - :view_documents
+    - :view_wiki_pages
+    - :view_wiki_edits
+    - :view_messages
+    - :view_files
+    - :browse_repository
+    - :view_changesets
+
+  position: 1
+roles_009:
+  name: AlreadyExisting
+  id: 9
+  builtin: 0
+  issues_visibility: default
+  users_visibility: all
+  permissions: |
+    ---
+    - :view_issues
+    - :add_issue_notes
+    - :view_gantt
+    - :view_calendar
+    - :view_time_entries
+    - :view_news
+    - :view_documents
+    - :view_wiki_pages
+    - :view_wiki_edits
+    - :view_messages
+    - :view_files
+    - :browse_repository
+    - :view_changesets
+
+  position: 1

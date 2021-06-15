@@ -7,6 +7,8 @@ servers:
     description: local development instance
   - url: https://192.168.56.2/redmine/extended_api
     description: local development instance inside a CES
+  - url: https://192.168.56.2/easyredmine/extended_api
+    description: local development instance inside a CES
 paths:
   /v1/enumerations/enumtypes:
     get:
@@ -385,6 +387,120 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/DeleteBody"
+  /v1/roles:
+    get:
+      summary: Lists all available roles
+      tags:
+        - roles
+      responses:
+        200:
+          description: all available roles will be returned
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Roles"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
+    post:
+      summary: Adds a new role
+      tags:
+        - roles
+      responses:
+        201:
+          description: role was successfully created
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RoleBody"
+  /v1/roles/{id}:
+    patch:
+      summary: Updates an existing role
+      tags:
+        - roles
+      responses:
+        200:
+          description: returns the updated role
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Role"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
+        404:
+          $ref: "#/components/responses/NotFound"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RoleBody"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          example: 12
+          required: false
+          description: id of the role
+    delete:
+      summary: Deletes an existing role
+      tags:
+        - roles
+      responses:
+        200:
+          description: returns the deleted role
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Role"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        403:
+          $ref: "#/components/responses/Forbidden"
+        404:
+          $ref: "#/components/responses/NotFound"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          example: 12
+          required: false
+          description: id of the role
+  /v1/roles/{id}/permissions:
+    get:
+      summary: Lists all available permissions assignable to the given role
+      tags:
+        - roles
+      responses:
+        200:
+          description: all available permissions
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StringArray"
+              example:
+                [
+                  "add_project",
+                  "edit_project",
+                  "close_project"
+                ]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          example: 12
+          required: false
+          description: id of the role
   /v1/settings:
     get:
       summary: List all available settings
@@ -893,6 +1009,73 @@ components:
           type: integer
         default_done_ratio:
           type: object
+    Role:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        position:
+          type: integer
+        assignable:
+          type: boolean
+        builtin:
+          type: integer
+        permissions:
+          $ref: "#/components/schemas/StringArray"
+        issues_visibility:
+          type: string
+        users_visibility:
+          type: string
+        time_entries_visibility:
+          type: string
+        all_roles_managed:
+          type: boolean
+        settings:
+          type: object
+    Roles:
+      type: array
+      items:
+        $ref: "#/components/schemas/Role"
+    RoleBody:
+      allOf:
+        - type: object
+          properties:
+            name:
+              type: string
+              required: true
+            managed_role_ids:
+              $ref: "#/components/schemas/StringArray"
+            permissions_all_trackers:
+              type: object
+              properties:
+                view_issues:
+                  type: string
+                add_issues:
+                  type: string
+                edit_issues:
+                  type: string
+                add_issue_notes:
+                  type: string
+                delete_issues:
+                  type: string
+            permissions_tracker_ids:
+              type: object
+              properties:
+                view_issues:
+                  $ref: "#/components/schemas/StringArray"
+                add_issues:
+                  $ref: "#/components/schemas/StringArray"
+                edit_issues:
+                  $ref: "#/components/schemas/StringArray"
+                add_issue_notes:
+                  $ref: "#/components/schemas/StringArray"
+                delete_issues:
+                  $ref: "#/components/schemas/StringArray"
+            copy_workflow_from:
+              type: string
+        - $ref: "#/components/schemas/Role"
     SettingsParam:
       type: object
       properties:
