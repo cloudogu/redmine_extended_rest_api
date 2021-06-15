@@ -442,6 +442,14 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/RoleBody"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          example: 12
+          required: false
+          description: id of the role
     delete:
       summary: Deletes an existing role
       tags:
@@ -459,6 +467,14 @@ paths:
           $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          example: 12
+          required: false
+          description: id of the role
   /v1/roles/{id}/permissions:
     get:
       summary: Lists all available permissions assignable to the given role
@@ -477,6 +493,14 @@ paths:
                   "edit_project",
                   "close_project"
                 ]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          example: 12
+          required: false
+          description: id of the role
   /v1/settings:
     get:
       summary: List all available settings
