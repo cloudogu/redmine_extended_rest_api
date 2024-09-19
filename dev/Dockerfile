@@ -1,10 +1,10 @@
-FROM ruby:2.6-slim-buster
+FROM ruby:3.2-slim-bullseye
 
 ENV RAILS_ENV test
 ENV HOME /home/redmine
 ENV WORKDIR /usr/src/redmine
-ENV REDMINE_VERSION 4.1.1
-ENV REDMINE_DOWNLOAD_MD5 a15a25dec7b866e213bbd4b041f05f17
+ENV REDMINE_VERSION 5.1.3
+ENV REDMINE_TARGZ_SHA256 8a22320fd9c940e6598f3ad5fb7a3933195c86068eee994ba6fcdc22c5cecb59
 
 # explicitly set uid/gid to guarantee that it won't change in the future
 # the values 999:999 are identical to the current user/group id assigned
@@ -18,7 +18,7 @@ RUN set -eux; \
 	rm -rf /var/lib/apt/lists/*
 
 WORKDIR "${WORKDIR}"
-
+70c513e89877dd776ba36a113cafd2de13450a921049a5c8fd2706d841039cf8
 RUN set -eux; \
 	[ ! -d "$HOME" ]; \
 	mkdir -p "$HOME"; \
@@ -27,7 +27,7 @@ RUN set -eux; \
 
 RUN set -eux; \
 	wget -O redmine.tar.gz "https://www.redmine.org/releases/redmine-${REDMINE_VERSION}.tar.gz"; \
-	echo "$REDMINE_DOWNLOAD_MD5 *redmine.tar.gz" | md5sum -c -; \
+	echo "${REDMINE_TARGZ_SHA256} *redmine.tar.gz" | sha256sum -c -; \
 	tar -xf redmine.tar.gz --strip-components=1; \
 	rm redmine.tar.gz files/delete.me log/delete.me; \
 	mkdir test/reports; \
@@ -42,7 +42,7 @@ RUN set -eux; \
 RUN set -eux; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
-		freetds-dev gcc libmariadbclient-dev libpq-dev libsqlite3-dev make patch; \
+		freetds-dev gcc libmariadb-dev libpq-dev libsqlite3-dev make patch; \
 	rm -rf /var/lib/apt/lists/*; \
 	\
 	# add gem for test execution
