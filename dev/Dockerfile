@@ -18,7 +18,7 @@ RUN set -eux; \
 	rm -rf /var/lib/apt/lists/*
 
 WORKDIR "${WORKDIR}"
-70c513e89877dd776ba36a113cafd2de13450a921049a5c8fd2706d841039cf8
+
 RUN set -eux; \
 	[ ! -d "$HOME" ]; \
 	mkdir -p "$HOME"; \
