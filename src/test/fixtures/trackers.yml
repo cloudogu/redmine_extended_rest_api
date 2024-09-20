@@ -2,45 +2,38 @@
 trackers_001:
   name: Bug
   id: 1
-  is_in_chlog: true
   default_status_id: 66
   position: 1
   description: Description for Bug tracker
 trackers_002:
   name: Feature request
   id: 2
-  is_in_chlog: true
   default_status_id: 1
   position: 2
   description: Description for Feature request tracker
 trackers_003:
   name: Support request
   id: 3
-  is_in_chlog: false
   default_status_id: 1
   position: 3
 trackers_004:
   name: Bug Request
   id: 4
-  is_in_chlog: false
   default_status_id: 55
   position: 5
 trackers_005:
   name: Delete Me!
   id: 5
-  is_in_chlog: false
   default_status_id: 55
   position: 6
 trackers_006:
   name: Don't touch this!
   id: 6
-  is_in_chlog: false
   default_status_id: 1
   position: 7
 trackers_007:
   name: Don't delete!
   description: The used issue status cannot be deleted.
   id: 7
-  is_in_chlog: false
   default_status_id: 111
   position: 8
