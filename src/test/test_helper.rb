@@ -25,7 +25,7 @@ class ActionDispatch::TestResponse
   end
 end
 
-module MiniTest::Assertions
+module Minitest::Assertions
   def assert_settings_contains settings, key, value
     contains_kv_pair, message = contains_setting_with_value(settings, key, value)
     assert contains_kv_pair, message
